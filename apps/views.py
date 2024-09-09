@@ -87,7 +87,7 @@ class ProfileDetailView(DetailView):
 class ProfileUpdateView(UpdateView):
     model = User
     template_name = 'apps/auth/profile-settings.html'
-    fields = 'image', 'first_name', 'last_name', 'address', 'telegram_id', 'district', 'district__region', 'about'
+    fields = 'image', 'first_name', 'last_name', 'address', 'telegram_id', 'district', 'about'
 
     def get_object(self, queryset=None):
         return self.request.user

@@ -2,7 +2,7 @@
 
 
 {% block content %}
-    
+
     <div class="row">
         <div class="col-12">
             <div class="card mb-3 btn-reveal-trigger">
@@ -16,7 +16,8 @@
                     </div>
                     <div class="avatar avatar-5xl avatar-profile shadow-sm img-thumbnail rounded-circle">
                         <div class="h-100 w-100 rounded-circle overflow-hidden position-relative"><img
-                                src="/media/img/nouser.png" width="200" alt="" data-dz-thumbnail="data-dz-thumbnail">
+                                src="{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
+                                width="200" alt="" data-dz-thumbnail="data-dz-thumbnail">
                         </div>
                     </div>
                 </div>
@@ -32,10 +33,8 @@
                 </div>
                 <div class="card-body bg-light">
 
-                    <form class="row g-3" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="csrfmiddlewaretoken"
-                               value="l1abzSbxABhPOTrdSCuQGGMwQhnheTS7SJGQDv8RkuINS0PnmRCstq5gTBwCx5a5">
-
+                    <form action="{% url 'profile_settings' %}" class="row g-3" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
                         <div class="col-lg-6">
                             Ismi
                             <input type="text" name="first_name" class="form-control" maxlength="30" id="id_first_name">
