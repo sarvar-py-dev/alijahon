@@ -16,6 +16,9 @@ class Product(SlugBaseModel, CreatedBaseModel):
     quantity = PositiveSmallIntegerField()
     category = ForeignKey('apps.Category', CASCADE, 'category')
 
+    class Meta:
+        ordering = '-created_at',
+
 
 class Favourite(Model):
     user = ForeignKey('apps.User', CASCADE)

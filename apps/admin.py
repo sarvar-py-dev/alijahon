@@ -1,3 +1,12 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 
-# Register your models here.
+from apps.models import Product, Category
+
+
+@register(Category)
+class CategoryModelAdmin(ModelAdmin):
+    pass
+
+@register(Product)
+class ProductModelAdmin(ModelAdmin):
+    pass

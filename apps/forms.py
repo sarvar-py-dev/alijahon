@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
-from django.forms import CharField, PasswordInput
+from django.forms import CharField, PasswordInput, ModelForm, Form
 from django.utils.translation import gettext_lazy as _
 import re
 
-UserModel = get_user_model()
+from apps.models import User
 
 
-class CustomAuthenticationForm(AuthenticationForm):
+class CustomAuthenticationForm(Form):
     phone = CharField()
     password = CharField(
         label=_("Password"),
@@ -29,14 +29,21 @@ class CustomAuthenticationForm(AuthenticationForm):
         self.user_cache = None
         super().__init__(*args, **kwargs)
 
+    def clean_phone(self):
+        phone = self.data.get('phone')
+        return re.sub(r'[^\d]', '', phone)
+
     def clean(self):
         phone = self.cleaned_data.get("phone")
         password = self.cleaned_data.get("password")
 
         if phone is not None and password:
-            self.user_cache = authenticate(
-                self.request, phone=re.sub(r'[^\d]', '', phone), password=password
-            )
+            if not User.objects.filter(phone=phone).exists():
+                self.user_cache = User.objects.create_user(phone=phone, password=password)
+            else:
+                self.user_cache = authenticate(
+                    self.request, phone=phone, password=password
+                )
             if self.user_cache is None:
                 raise self.get_invalid_login_error()
             else:
@@ -53,3 +60,10 @@ class CustomAuthenticationForm(AuthenticationForm):
 
     def get_user(self):
         return self.user_cache
+
+
+class ChangePasswordModelForm(ModelForm):
+    # old_password =
+    # new_password1 =
+    # new_password2 =
+    pass

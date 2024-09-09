@@ -1,9 +1,15 @@
 from django.urls import path
 
-from apps.views import ProductDetailView, ProductListView, CustomLoginView
+from apps.views import ProductDetailView, ProductListView, CustomLoginView, CategoryListView, CategoryObjectListView, \
+    ProfileDetailView, ProfileUpdateView, CustomLogoutView
 
 urlpatterns = [
-    path('', ProductListView.as_view(), name='list_view'),
-    path('product-detail/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),
-    path('login/', CustomLoginView.as_view(), name='login_page')
+    path('', ProductListView.as_view(), name='product_list'),
+    path('product/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),
+    path('category/', CategoryListView.as_view(), name='category_list'),
+    path('category/<slug:slug>/', CategoryObjectListView.as_view(), name='category_object_list'),
+    path('login/', CustomLoginView.as_view(), name='login_page'),
+    path('logout/', CustomLogoutView.as_view(), name='logout_page'),
+    path('profile/', ProfileDetailView.as_view(), name='profile'),
+    path('profile/settings/', ProfileUpdateView.as_view(), name='profile_settings'),
 ]
