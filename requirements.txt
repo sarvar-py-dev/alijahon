@@ -1,0 +1,12 @@
+asgiref==3.8.1
+cffi==1.17.1
+cryptography==43.0.1
+Django==5.1.1
+django-ckeditor-5==0.2.13
+mysql-connector-python==9.0.0
+pillow==10.4.0
+pycparser==2.22
+PyMySQL==1.1.1
+python-dotenv==1.0.1
+sqlparse==0.5.1
+typing_extensions==4.12.2
