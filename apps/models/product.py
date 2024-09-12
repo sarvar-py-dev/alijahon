@@ -6,12 +6,12 @@ from apps.models.base import SlugBaseModel, CreatedBaseModel
 
 
 class Category(SlugBaseModel):
-    image = ImageField(upload_to='categories/Y/m/d')
+    image = ImageField(upload_to='categories/%Y/%m/%d')
 
 
 class Product(SlugBaseModel, CreatedBaseModel):
     description = CKEditor5Field()
-    image = ImageField(upload_to='products/')
+    image = ImageField(upload_to='products/%Y/%m/%d')
     price = PositiveIntegerField()
     quantity = PositiveSmallIntegerField()
     category = ForeignKey('apps.Category', CASCADE, 'category')

@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.forms import CharField, PasswordInput, ModelForm, Form
 from django.utils.translation import gettext_lazy as _
@@ -45,7 +46,8 @@ class CustomAuthenticationForm(Form):
                     self.request, phone=phone, password=password
                 )
             if self.user_cache is None:
-                raise self.get_invalid_login_error()
+                raise ValidationError(self.error_messages["inactive"],
+                                      code="inactive")
             else:
                 self.confirm_login_allowed(self.user_cache)
 
@@ -63,7 +65,30 @@ class CustomAuthenticationForm(Form):
 
 
 class ChangePasswordModelForm(ModelForm):
-    # old_password =
-    # new_password1 =
-    # new_password2 =
-    pass
+    new_password1 = CharField(max_length=255)
+    new_password2 = CharField(max_length=255)
+
+    class Meta:
+        model = User
+        fields = 'password', 'new_password1', 'new_password2'
+
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+        if not self.instance.check_password(password):
+            raise ValidationError('Password xato')
+        return password
+
+    def clean(self):
+        new_password1 = self.cleaned_data.get("new_password1")
+        new_password2 = self.cleaned_data.get("new_password2")
+        if new_password1 != new_password2:
+            raise ValidationError('Password xato')
+
+        return super().clean()
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["new_password1"])
+        if commit:
+            user.save()
+        return user

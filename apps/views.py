@@ -1,14 +1,17 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils.termcolors import RESET
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView
 from typing_extensions import reveal_type
 
 from apps.forms import CustomAuthenticationForm, ChangePasswordModelForm
 from apps.models import Product, Category, User
+from apps.models.user import Region
 
 
 class ProductListView(ListView):
@@ -70,13 +73,13 @@ class CustomLoginView(LoginView):
         return redirect('product_list')
 
 
-class CustomLogoutView(View):
+class LogoutView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect(reverse_lazy('product_list'))
 
 
-class ProfileDetailView(DetailView):
+class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'apps/auth/profile.html'
 
@@ -84,19 +87,26 @@ class ProfileDetailView(DetailView):
         return self.request.user
 
 
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'apps/auth/profile-settings.html'
     fields = 'image', 'first_name', 'last_name', 'address', 'telegram_id', 'district', 'about'
+    success_url = reverse_lazy('profile_settings')
 
     def get_object(self, queryset=None):
         return self.request.user
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['regions'] = Region.objects.all()
+        return ctx
 
-class PasswordUpdateView(UpdateView):
+
+class PasswordUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'apps/auth/profile-settings.html'
     form_class = ChangePasswordModelForm
+    success_url = reverse_lazy('profile_settings')
 
     def get_object(self, queryset=None):
         return self.request.user
