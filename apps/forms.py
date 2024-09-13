@@ -1,10 +1,9 @@
-from django.contrib.auth import get_user_model, authenticate
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.hashers import make_password
+import re
+
+from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
 from django.forms import CharField, PasswordInput, ModelForm, Form
 from django.utils.translation import gettext_lazy as _
-import re
 
 from apps.models import User
 

@@ -4,8 +4,8 @@ register = template.Library()
 
 
 @register.filter(name='is_current_category')
-def is_current_category(page, category=None):
+def is_current_category(page, category_slug=None):
     current_category = page.split('category/')[-1][:-1]
-    if category is None:
+    if category_slug is None:
         return current_category == ''
-    return current_category == category.slug
+    return current_category == category_slug

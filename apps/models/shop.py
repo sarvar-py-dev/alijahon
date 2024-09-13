@@ -1,5 +1,5 @@
 from django.db.models import Model, ImageField, PositiveIntegerField, PositiveSmallIntegerField, CASCADE, \
-    ForeignKey, BooleanField, TextField, CharField, TextChoices, SET_NULL
+    ForeignKey, BooleanField, TextField, CharField, TextChoices, SET_NULL, FileField, IntegerField, URLField
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.models.base import SlugBaseModel, TimeBaseModel
@@ -35,11 +35,19 @@ class Order(TimeBaseModel):
         CANCELED = "canceled", 'Canceled'
         ARCHIVED = "archived", 'Archived'
 
+    quantity = PositiveSmallIntegerField(db_default=1)
     product = ForeignKey('apps.Product', CASCADE)
-    phone = CharField(max_length=12, unique=True)
+    phone = CharField(max_length=12)
     full_name = CharField(max_length=255)
     owner = ForeignKey('apps.User', SET_NULL, related_name='orders', null=True, blank=True)
-    status = CharField(max_length=255, choices=StatusType.choices)
+    status = CharField(max_length=255, choices=StatusType.choices, default=StatusType.NEW)
     region = ForeignKey('apps.Region', CASCADE)
     district = ForeignKey('apps.District', CASCADE)
+    stream = ForeignKey('apps.Stream', SET_NULL, null=True, blank=True)
 
+
+class Stream(TimeBaseModel):
+    name = CharField(max_length=255)
+    discount = IntegerField(db_default=0)
+    owner = ForeignKey('apps.User', CASCADE)
+    product = ForeignKey('apps.Product', CASCADE)

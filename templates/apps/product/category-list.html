@@ -31,7 +31,7 @@
                         </a>
                         {% for category in categories %}
                             <a href="{% url 'category_object_list' category.slug %}"
-                               class="btn btn-default {% if request.path|is_current_category:category %}active{% endif %}">
+                               class="btn btn-default {% if request.path|is_current_category:category.slug %}active{% endif %}">
                                 {{ category.name }}
                             </a>
                         {% endfor %}

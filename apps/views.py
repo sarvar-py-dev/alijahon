@@ -2,14 +2,14 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from apps.forms import CustomAuthenticationForm, ChangePasswordModelForm
-from apps.models import Product, Category, User
-from apps.models.users import Region
+from apps.forms import CustomAuthenticationForm
+from apps.models import Product, Category, User, Region, District
 
 
 class ProductListView(ListView):
@@ -30,14 +30,14 @@ class ProductDetailView(DetailView):
 
 
 class CategoryListView(ListView):
-    model = Category
+    model = Product
     template_name = 'apps/product/category-list.html'
-    context_object_name = 'categories'
+    context_object_name = 'products'
     paginate_by = 13
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
-        ctx['products'] = Product.objects.all()
+        ctx['categories'] = Category.objects.all()
         return ctx
 
     def get_queryset(self):
@@ -48,15 +48,20 @@ class CategoryListView(ListView):
 
 
 class CategoryObjectListView(ListView):
-    model = Category
+    model = Product
     template_name = 'apps/product/category-list.html'
-    context_object_name = 'categories'
+    context_object_name = 'products'
     paginate_by = 10
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if slug := self.kwargs.get('slug'):
+            qs.filter(category__slug=slug)
+        return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
-        ctx['products'] = Product.objects.filter(category__slug=ctx['view'].kwargs.get('slug'))
-
+        ctx['categories'] = Category.objects.all()
         return ctx
 
 
@@ -88,7 +93,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'apps/auth/profile-settings.html'
-    fields = 'image', 'first_name', 'last_name', 'address', 'telegram_id', 'district', 'about'
     success_url = reverse_lazy('profile_settings')
 
     def get_object(self, queryset=None):
@@ -97,17 +101,17 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['regions'] = Region.objects.all()
+        ctx['districts'] = District.objects.all()
         return ctx
 
 
-class PasswordUpdateView(LoginRequiredMixin, UpdateView):
-    model = User
-    template_name = 'apps/auth/profile-settings.html'
-    form_class = ChangePasswordModelForm
-    success_url = reverse_lazy('profile_settings')
-
-    def get_object(self, queryset=None):
-        return self.request.user
+class DistrictListView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        region_id = request.GET.get('region_id')
+        if region_id:
+            districts = District.objects.filter(region_id=region_id).values('id', 'name')
+            return JsonResponse(list(districts), safe=False)
+        return JsonResponse([], safe=False)
 
 
 class OrderCreateView(CreateView):

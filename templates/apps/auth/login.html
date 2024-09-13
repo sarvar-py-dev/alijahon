@@ -62,3 +62,11 @@
     </div>
 
 {% endblock %}
+{% block custom_js %}
+    <script>
+        $('#phone-mask').inputmask({
+            "mask": "+\\9\\98(99) 999-99-99"
+        });
+        $('#messages-modal').modal('show');
+    </script>
+{% endblock %}
