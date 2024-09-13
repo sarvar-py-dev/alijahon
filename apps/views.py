@@ -4,14 +4,12 @@ from django.contrib.auth.views import LoginView
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.termcolors import RESET
 from django.views import View
-from django.views.generic import ListView, DetailView, UpdateView
-from typing_extensions import reveal_type
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from apps.forms import CustomAuthenticationForm, ChangePasswordModelForm
 from apps.models import Product, Category, User
-from apps.models.user import Region
+from apps.models.users import Region
 
 
 class ProductListView(ListView):
@@ -110,3 +108,7 @@ class PasswordUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class OrderCreateView(CreateView):
+    pass

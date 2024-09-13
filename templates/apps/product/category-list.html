@@ -1,17 +1,37 @@
 {% extends  'apps/base.html' %}
 
+{% load category_tags %}
+
 {% block content %}
+    <style>
+        .header_menu {
+            padding: 12px;
+        }
+
+        .header_menu .btn-default {
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 15px;
+        }
+
+        .header_menu .btn-default.active, .header_menu .btn-default:hover {
+            background-color: #eee;
+        }
+    </style>
 
     <div class="card mb-3">
         <div class="card-body">
             <div class="container border-bottom-4">
                 <div class="header_tab_menu ">
                     <div class="header_menu active" style="overflow: auto">
-                        <a href="{% url 'category_list' %}" class="btn btn-default active">
+                        <a href="{% url 'category_list' %}"
+                           class="btn btn-default {% if request.path|is_current_category %}active{% endif %}">
                             Barchasi
                         </a>
                         {% for category in categories %}
-                            <a href="{% url 'category_object_list' category.slug %}" class="btn btn-default">
+                            <a href="{% url 'category_object_list' category.slug %}"
+                               class="btn btn-default {% if request.path|is_current_category:category %}active{% endif %}">
                                 {{ category.name }}
                             </a>
                         {% endfor %}
@@ -49,7 +69,8 @@
 
                                     <div class="d-flex flex-between-center px-3">
 
-                                        <div><a class="btn btn-sm btn-falcon-default" style="width: 130px;" href="{% url 'product_detail' product.slug %}"
+                                        <div><a class="btn btn-sm btn-falcon-default" style="width: 130px;"
+                                                href="{% url 'product_detail' product.slug %}"
                                                 data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                                 data-bs-original-title="Add to Cart" aria-label="Add to Cart">
                                             <svg class="svg-inline--fa fa-cart-plus fa-w-18" aria-hidden="true"

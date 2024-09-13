@@ -1,2 +1,2 @@
-from apps.models.product import Product, Category, Favourite
-from apps.models.user import User
+from apps.models.shop import Product, Category, Favourite
+from apps.models.users import User, Region, District

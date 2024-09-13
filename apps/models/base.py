@@ -2,7 +2,7 @@ from django.db.models import Model, DateTimeField, SlugField, CharField
 from django.utils.text import slugify
 
 
-class CreatedBaseModel(Model):
+class TimeBaseModel(Model):
     updated_at = DateTimeField(auto_now=True)
     created_at = DateTimeField(auto_now_add=True)
 
