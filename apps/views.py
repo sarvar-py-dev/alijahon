@@ -8,8 +8,8 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from apps.forms import CustomAuthenticationForm
-from apps.models import Product, Category, User, Region, District
+from apps.forms import CustomAuthenticationForm, OrderCreateModelForm
+from apps.models import Product, Category, User, Region, District, Order
 
 
 class ProductListView(ListView):
@@ -114,5 +114,13 @@ class DistrictListView(LoginRequiredMixin, View):
         return JsonResponse([], safe=False)
 
 
-class OrderCreateView(CreateView):
-    pass
+class OrderCreateView(LoginRequiredMixin, CreateView):
+    model = Order
+    template_name = 'apps/product/product-details.html'
+    form_class = OrderCreateModelForm
+    success_url = reverse_lazy('success_product')
+
+
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'apps/order/success_product.html'

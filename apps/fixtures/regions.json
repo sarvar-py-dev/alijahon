@@ -3,112 +3,98 @@
     "model": "apps.region",
     "pk": 1,
     "fields": {
-      "name": "Qoraqalpog‘iston Respublikasi",
-      "slug": "qoraqalpogiston-respublikasi"
+      "name": "Qoraqalpog‘iston Respublikasi"
     }
   },
   {
     "model": "apps.region",
     "pk": 2,
     "fields": {
-      "name": "Andijon viloyati",
-      "slug": "andijon-viloyati"
+      "name": "Andijon viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 3,
     "fields": {
-      "name": "Buxoro viloyati",
-      "slug": "buxoro-viloyati"
+      "name": "Buxoro viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 4,
     "fields": {
-      "name": "Jizzax viloyati",
-      "slug": "jizzax-viloyati"
+      "name": "Jizzax viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 5,
     "fields": {
-      "name": "Qashqadaryo viloyati",
-      "slug": "qashqadaryo-viloyati"
+      "name": "Qashqadaryo viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 6,
     "fields": {
-      "name": "Navoiy viloyati",
-      "slug": "navoiy-viloyati"
+      "name": "Navoiy viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 7,
     "fields": {
-      "name": "Namangan viloyati",
-      "slug": "namangan-viloyati"
+      "name": "Namangan viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 8,
     "fields": {
-      "name": "Samarqand viloyati",
-      "slug": "samarqand-viloyati"
+      "name": "Samarqand viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 9,
     "fields": {
-      "name": "Surxandaryo viloyati",
-      "slug": "surxandaryo-viloyati"
+      "name": "Surxandaryo viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 10,
     "fields": {
-      "name": "Sirdaryo viloyati",
-      "slug": "sirdaryo-viloyati"
+      "name": "Sirdaryo viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 11,
     "fields": {
-      "name": "Toshkent viloyati",
-      "slug": "toshkent-viloyati"
+      "name": "Toshkent viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 12,
     "fields": {
-      "name": "Farg‘ona viloyati",
-      "slug": "fargona-viloyati"
+      "name": "Farg‘ona viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 13,
     "fields": {
-      "name": "Xorazm viloyati",
-      "slug": "xorazm-viloyati"
+      "name": "Xorazm viloyati"
     }
   },
   {
     "model": "apps.region",
     "pk": 14,
     "fields": {
-      "name": "Toshkent shahri",
-      "slug": "toshkent-shahri"
+      "name": "Toshkent shahri"
     }
   }
 ]

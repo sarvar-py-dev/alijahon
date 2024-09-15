@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, Model, ForeignKey, CASCADE, TextField, ImageField, TextChoices
+from django.db.models import CharField, Model, ForeignKey, CASCADE, TextField, ImageField, TextChoices, FloatField, \
+    IntegerField, PositiveIntegerField
 
 from apps.models.base import SlugBaseModel
 from apps.models.managers import CustomUserManager
@@ -36,3 +37,9 @@ class Region(Model):
 class District(Model):
     name = CharField(max_length=255)
     region = ForeignKey('apps.Region', CASCADE)
+
+
+class SiteSettings(Model):
+    delivery_price_regions = PositiveIntegerField(db_default=0)
+    delivery_price_tashkent_region = PositiveIntegerField(db_default=0)
+    delivery_price_tashkent = PositiveIntegerField(db_default=0)

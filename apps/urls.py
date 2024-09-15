@@ -2,7 +2,7 @@ from django.urls import path
 
 from apps.forms import ChangePasswordModelForm
 from apps.views import ProductDetailView, ProductListView, CustomLoginView, CategoryListView, CategoryObjectListView, \
-    ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView
+    ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView
 
 urlpatterns = [
     path('', ProductListView.as_view(), name='product_list'),
@@ -19,5 +19,5 @@ urlpatterns = [
         form_class=ChangePasswordModelForm
     ), name='update_password'),
     path('get-districts/', DistrictListView.as_view(), name='get_districts'),
-
+    path('success-product/<int:pk>/', OrderDetailView.as_view(), name='success_product')
 ]

@@ -45,6 +45,14 @@ class Order(TimeBaseModel):
     district = ForeignKey('apps.District', CASCADE)
     stream = ForeignKey('apps.Stream', SET_NULL, null=True, blank=True)
 
+    @property
+    def price(self):
+        if self.stream:
+            new_price = self.product.price - self.stream.discount
+        else:
+            new_price = self.product.price
+        return new_price
+
 
 class Stream(TimeBaseModel):
     name = CharField(max_length=255)

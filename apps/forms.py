@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.forms import CharField, PasswordInput, ModelForm, Form
 from django.utils.translation import gettext_lazy as _
 
-from apps.models import User
+from apps.models import User, Order
 
 
 class CustomAuthenticationForm(Form):
@@ -91,3 +91,10 @@ class ChangePasswordModelForm(ModelForm):
         if commit:
             user.save()
         return user
+
+
+class OrderCreateModelForm(ModelForm):
+    # class Meta:
+    #     model = Order
+    #     fields = '',
+    pass
