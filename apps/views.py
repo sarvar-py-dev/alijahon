@@ -9,13 +9,14 @@ from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from apps.forms import CustomAuthenticationForm, OrderCreateModelForm
-from apps.models import Product, Category, User, Region, District, Order
+from apps.models import Product, Category, User, Region, District, Order, Stream
 
 
 class ProductListView(ListView):
     model = Product
     template_name = 'apps/product/product-list.html'
     context_object_name = 'products'
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
@@ -116,11 +117,33 @@ class DistrictListView(LoginRequiredMixin, View):
 
 class OrderCreateView(LoginRequiredMixin, CreateView):
     model = Order
-    template_name = 'apps/product/product-details.html'
+    template_name = 'apps/order/success-product.html'
     form_class = OrderCreateModelForm
-    success_url = reverse_lazy('success_product')
+    success_url = reverse_lazy('success-product')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 class OrderDetailView(DetailView):
     model = Order
-    template_name = 'apps/order/success_product.html'
+    template_name = 'apps/order/success-product.html'
+
+
+class MarketListView(ProductListView):
+    template_name = 'apps/stream/market.html'
+
+
+class StreamListView(ListView):
+    model = Stream
+    template_name = 'apps/stream/stream.html'
+    context_object_name = 'streams'
+
+
+class StreamProductDetailView(DetailView):
+    model = Stream
+    template_name = 'apps/product/product-details.html'
+

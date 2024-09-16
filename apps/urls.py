@@ -2,7 +2,8 @@ from django.urls import path
 
 from apps.forms import ChangePasswordModelForm
 from apps.views import ProductDetailView, ProductListView, CustomLoginView, CategoryListView, CategoryObjectListView, \
-    ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView
+    ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView, OrderCreateView, \
+    StreamListView, StreamProductDetailView
 
 urlpatterns = [
     path('', ProductListView.as_view(), name='product_list'),
@@ -19,5 +20,8 @@ urlpatterns = [
         form_class=ChangePasswordModelForm
     ), name='update_password'),
     path('get-districts/', DistrictListView.as_view(), name='get_districts'),
-    path('success-product/<int:pk>/', OrderDetailView.as_view(), name='success_product')
+    path('success-product/<int:pk>/', OrderDetailView.as_view(), name='success_product'),
+    path('order-create/', OrderCreateView.as_view(), name='order_create'),
+    path('admin_page/urls/', StreamListView.as_view(), name='stream_list'),
+    path('oqim/<int:pk>', StreamProductDetailView.as_view(), name='stream_product')
 ]

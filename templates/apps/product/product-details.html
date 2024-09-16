@@ -7,17 +7,16 @@
         <div class="card-body">
             <div class="col-lg-8 swiper-container">
 
-                <form method="post">
+                <form method="post" action="{% url 'order_create' %}">
                     {% csrf_token %}
-                    <input type="hidden" name="csrfmiddlewaretoken"
-                           value="MFW4XGILpweJ50SFm0JMkmf5DYIVclBq8qtWWa7YF8KHdbFoF1uvhceGmYtcwFsA">
+                    <input class="form-control" name="product" type="hidden" value="{{ product.pk }}">
                     <div class="mb-2">
                         <label class="form-label" for="formGroupNameInput">Ism:</label>
                         <input class="form-control" name="full_name" id="formGroupNameInput" type="text"/>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label" for="formGroupEmailInput">Telefon nomer:</label>
-                        <input class="form-control" id="phone-mask" required name="phone_number" type="text"/>
+                        <label class="form-label" for="phone-mask">Telefon nomer:</label>
+                        <input class="form-control" id="phone-mask" required name="phone" type="text"/>
                     </div>
                     <span style="padding-bottom: 100px;">
 
@@ -41,7 +40,12 @@
                 {{ product.description|safe }}
                 <h4 class="d-flex align-items-center">
                 <span class="text-warning me-2">
-                {{ product.price }} so'm
+                    {% if 'oqim' in request.path %}
+                        {{ stream.product.price|add:-stream.discount }}
+                    {% else %}
+                        {{ product.price }}
+                    {% endif %}
+                    so'm
                 </span>
 
 
@@ -50,4 +54,13 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block custom_js %}
+    <script>
+        $('#phone-mask').inputmask({
+            "mask": "+\\9\\98(99) 999-99-99"
+        });
+        $('#messages-modal').modal('show');
+    </script>
 {% endblock %}

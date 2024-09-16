@@ -1,11 +1,12 @@
 import re
+from itertools import product
 
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ValidationError
-from django.forms import CharField, PasswordInput, ModelForm, Form
+from django.forms import CharField, PasswordInput, ModelForm, Form, ModelChoiceField
 from django.utils.translation import gettext_lazy as _
 
-from apps.models import User, Order
+from apps.models import User, Order, Product
 
 
 class CustomAuthenticationForm(Form):
@@ -94,7 +95,20 @@ class ChangePasswordModelForm(ModelForm):
 
 
 class OrderCreateModelForm(ModelForm):
-    # class Meta:
-    #     model = Order
-    #     fields = '',
-    pass
+    # product = ModelChoiceField(Product.objects.all())
+
+    class Meta:
+        model = Order
+        exclude = 'quantity', 'status', 'product', 'region', 'district'
+
+    # def clean_phone(self):
+    #     phone = self.data.get('phone')
+    #     return re.sub(r'[^\d]', '', phone)
+
+    # def save(self, commit=True):
+    #     obj: Order = super().save(commit)
+    #
+    #     if 2 == 2:
+    #         pass
+    #
+    #     return obj

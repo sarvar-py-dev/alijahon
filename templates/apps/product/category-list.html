@@ -26,12 +26,12 @@
                 <div class="header_tab_menu ">
                     <div class="header_menu active" style="overflow: auto">
                         <a href="{% url 'category_list' %}"
-                           class="btn btn-default {% if request.path|is_current_category %}active{% endif %}">
+                           class="btn btn-default {{ request.path|is_current_category }}">
                             Barchasi
                         </a>
                         {% for category in categories %}
                             <a href="{% url 'category_object_list' category.slug %}"
-                               class="btn btn-default {% if request.path|is_current_category:category.slug %}active{% endif %}">
+                               class="btn btn-default {{ request.path|is_current_category:category.slug }}">
                                 {{ category.name }}
                             </a>
                         {% endfor %}
