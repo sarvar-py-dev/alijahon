@@ -34,9 +34,6 @@ class ProductDetailView(DetailView, CreateView):
         order = form.save()
         return redirect('success_product', pk=order.pk)
 
-    def form_invalid(self, form):
-        return super().form_invalid(form)
-
 
 class CategoryListView(ListView):
     model = Product
@@ -131,6 +128,12 @@ class OrderDetailView(DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['delivery'] = SiteSettings.objects.first()
         return ctx
+
+
+class OrderListView(ListView):
+    model = Order
+    template_name = 'apps/order/order-list.html'
+    context_object_name = 'orders'
 
 
 class MarketListView(ProductListView):

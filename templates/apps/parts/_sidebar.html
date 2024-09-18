@@ -43,7 +43,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="/profile/ordered-products" aria-expanded="false">
+                            <a class="nav-link active" href="{% url 'order_list' %}" aria-expanded="false">
                                 <div class="d-flex align-items-center"><span
                                         class="nav-link-text ps-1">Buyurtmalar</span>
                                 </div>
@@ -62,14 +62,14 @@
                         <hr class="mb-0 navbar-vertical-divider"/>
                         <ul class="nav collapse show" id="dashboard">
                             <li class="nav-item">
-                                <a class="nav-link active" href="/admin_page/market/" aria-expanded="false">
+                                <a class="nav-link active" href="{% url 'market' %}" aria-expanded="false">
                                     <div class="d-flex align-items-center"><span
                                             class="nav-link-text ps-1">Market</span>
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="/admin_page/urls" aria-expanded="false">
+                                <a class="nav-link active" href="{% url 'stream_list' %}" aria-expanded="false">
                                     <div class="d-flex align-items-center"><span
                                             class="nav-link-text ps-1">Oqim</span>
                                     </div>

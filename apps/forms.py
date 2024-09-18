@@ -106,5 +106,3 @@ class OrderCreateModelForm(ModelForm):
         phone = self.data.get('phone')
         return re.sub(r'[^\d]', '', phone)
 
-    def clean_product(self):
-        return self.cleaned_data['product']
