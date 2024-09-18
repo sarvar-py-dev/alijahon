@@ -96,19 +96,15 @@ class ChangePasswordModelForm(ModelForm):
 
 class OrderCreateModelForm(ModelForm):
     # product = ModelChoiceField(Product.objects.all())
+    phone = CharField(max_length=18)
 
     class Meta:
         model = Order
-        exclude = 'quantity', 'status', 'product', 'region', 'district'
+        exclude = 'quantity', 'status', 'region', 'district'
 
-    # def clean_phone(self):
-    #     phone = self.data.get('phone')
-    #     return re.sub(r'[^\d]', '', phone)
+    def clean_phone(self):
+        phone = self.data.get('phone')
+        return re.sub(r'[^\d]', '', phone)
 
-    # def save(self, commit=True):
-    #     obj: Order = super().save(commit)
-    #
-    #     if 2 == 2:
-    #         pass
-    #
-    #     return obj
+    def clean_product(self):
+        return self.cleaned_data['product']

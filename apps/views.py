@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from apps.forms import CustomAuthenticationForm, OrderCreateModelForm
-from apps.models import Product, Category, User, Region, District, Order, Stream
+from apps.models import Product, Category, User, Region, District, Order, Stream, SiteSettings
 
 
 class ProductListView(ListView):
@@ -24,17 +24,25 @@ class ProductListView(ListView):
         return ctx
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(DetailView, CreateView):
     model = Product
-    template_name = 'apps/product/product-details.html'
+    template_name = 'apps/product/product-detail.html'
+    form_class = OrderCreateModelForm
     context_object_name = 'product'
+
+    def form_valid(self, form):
+        order = form.save()
+        return redirect('success_product', pk=order.pk)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 class CategoryListView(ListView):
     model = Product
     template_name = 'apps/product/category-list.html'
     context_object_name = 'products'
-    paginate_by = 13
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
@@ -115,22 +123,14 @@ class DistrictListView(LoginRequiredMixin, View):
         return JsonResponse([], safe=False)
 
 
-class OrderCreateView(LoginRequiredMixin, CreateView):
-    model = Order
-    template_name = 'apps/order/success-product.html'
-    form_class = OrderCreateModelForm
-    success_url = reverse_lazy('success-product')
-
-    def form_valid(self, form):
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        return super().form_invalid(form)
-
-
 class OrderDetailView(DetailView):
     model = Order
     template_name = 'apps/order/success-product.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['delivery'] = SiteSettings.objects.first()
+        return ctx
 
 
 class MarketListView(ProductListView):
@@ -145,5 +145,4 @@ class StreamListView(ListView):
 
 class StreamProductDetailView(DetailView):
     model = Stream
-    template_name = 'apps/product/product-details.html'
-
+    template_name = 'apps/product/product-detail.html'

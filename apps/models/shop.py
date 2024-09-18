@@ -15,6 +15,7 @@ class Product(SlugBaseModel, TimeBaseModel):
     price = PositiveIntegerField()
     quantity = PositiveSmallIntegerField()
     category = ForeignKey('apps.Category', CASCADE, related_name='products')
+    payment_referral = PositiveIntegerField(help_text="so'mda", null=True, blank=True)
 
     class Meta:
         ordering = '-created_at',
@@ -41,8 +42,8 @@ class Order(TimeBaseModel):
     full_name = CharField(max_length=255)
     owner = ForeignKey('apps.User', SET_NULL, related_name='orders', null=True, blank=True)
     status = CharField(max_length=255, choices=StatusType.choices, default=StatusType.NEW)
-    region = ForeignKey('apps.Region', CASCADE)
-    district = ForeignKey('apps.District', CASCADE)
+    region = ForeignKey('apps.Region', CASCADE, null=True, blank=True)
+    district = ForeignKey('apps.District', CASCADE, null=True, blank=True)
     stream = ForeignKey('apps.Stream', SET_NULL, null=True, blank=True)
 
     @property
