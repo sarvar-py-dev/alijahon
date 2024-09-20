@@ -1,8 +1,7 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, Model, ForeignKey, CASCADE, TextField, ImageField, TextChoices, FloatField, \
-    IntegerField, PositiveIntegerField
+from django.db.models import CharField, Model, ForeignKey, CASCADE, TextField, ImageField, TextChoices, \
+    PositiveIntegerField
 
-from apps.models.base import SlugBaseModel
 from apps.models.managers import CustomUserManager
 
 

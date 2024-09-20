@@ -91,24 +91,25 @@
 
                         <div class="col-sm-4 p-2">
                             <div class="card">
-                                <a href="/product-detail/ozbekiston-gerbi-va-xaritasi-tushirilgan-soat" target="_blank">
-                                    <img class="card-img-top" src="/media/product/IMG_2036.jpeg"
-                                         alt="O‘zbekiston gerbi va xaritasi tushirilgan soat">
+                                <a href="{% url 'product_detail' product.slug %}" target="_blank">
+                                    <img class="card-img-top" src="{{ product.image.url }}"
+                                         alt="{{ product.name }}">
                                 </a>
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <a href="/product-detail/ozbekiston-gerbi-va-xaritasi-tushirilgan-soat"
+                                        <a href="{% url 'product_detail' product.slug %}"
                                            target="_blank">
-                                            O‘zbekiston gerbi va xaritasi tushirilgan soat
+                                            {{ product.name }}
                                         </a>
                                     </h5>
-                                    <p class="text-muted"> 89000 so'm </p>
+                                    <p class="text-muted"> {{ product.price }} so'm </p>
                                 </div>
 
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">To'lov: <strong>30000 </strong></li>
+                                    <li class="list-group-item">To'lov: <strong>{{ product.payment_referral }} </strong>
+                                    </li>
 
-                                    <li class="list-group-item">Zaxirada: <strong> 900 ta </strong>
+                                    <li class="list-group-item">Zaxirada: <strong> {{ product.quantity }} ta </strong>
                                     </li>
 
                                     <li class="list-group-item">Chegirma: <strong> yuq </strong>
@@ -124,7 +125,8 @@
                                         data-bs-target="#exampleModal" name="464">
                                     Oqim yaratish
                                 </button>
-                                <a href="/admin_page/product/464" class="btn bg-danger text-white mt-2">Batafsil</a>
+                                <a href="{% url 'statistic_product' product.id %}"
+                                   class="btn bg-danger text-white mt-2">Batafsil</a>
                             </div>
                         </div>
 

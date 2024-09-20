@@ -1,6 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -8,7 +9,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from apps.forms import CustomAuthenticationForm, OrderCreateModelForm
+from apps.forms import CustomAuthenticationForm, OrderCreateModelForm, StreamCreateModelForm
 from apps.models import Product, Category, User, Region, District, Order, Stream, SiteSettings
 
 
@@ -32,7 +33,22 @@ class ProductDetailView(DetailView, CreateView):
 
     def form_valid(self, form):
         order = form.save()
+        if len(form.cleaned_data['phone']) != 12:
+            raise ValidationError('number must be 12 in length')
         return redirect('success_product', pk=order.pk)
+
+
+class ProductStatisticDetailView(LoginRequiredMixin, DetailView):
+    model = Product
+    template_name = 'apps/product/product-statistics.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['all_stream_len'] = Stream.objects.count()
+        ctx['user_stream_len'] = Stream.objects.filter(owner=self.request.user).count()
+
+        return ctx
 
 
 class CategoryListView(ListView):
@@ -135,9 +151,18 @@ class OrderListView(ListView):
     template_name = 'apps/order/order-list.html'
     context_object_name = 'orders'
 
+    def get(self, request, *args, **kwargs):
+        return redirect('login_page')
+
 
 class MarketListView(ProductListView):
     template_name = 'apps/stream/market.html'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if category_slug := self.request.GET.get('category'):
+            qs = qs.filter(category__slug=category_slug)
+        return qs
 
 
 class StreamListView(ListView):
@@ -149,3 +174,9 @@ class StreamListView(ListView):
 class StreamProductDetailView(DetailView):
     model = Stream
     template_name = 'apps/product/product-detail.html'
+
+
+class StreamCreateView(CreateView):
+    model = Stream
+    template_name = 'apps/stream/market.html'
+    form_class = StreamCreateModelForm

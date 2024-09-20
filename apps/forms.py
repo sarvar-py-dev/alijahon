@@ -39,6 +39,8 @@ class CustomAuthenticationForm(Form):
         password = self.cleaned_data.get("password")
 
         if phone is not None and password:
+            if len(phone) != 12:
+                raise ValidationError('number must be 12 in length')
             if not User.objects.filter(phone=phone).exists():
                 self.user_cache = User.objects.create_user(phone=phone, password=password)
             else:
@@ -95,7 +97,6 @@ class ChangePasswordModelForm(ModelForm):
 
 
 class OrderCreateModelForm(ModelForm):
-    # product = ModelChoiceField(Product.objects.all())
     phone = CharField(max_length=18)
 
     class Meta:
@@ -106,3 +107,6 @@ class OrderCreateModelForm(ModelForm):
         phone = self.data.get('phone')
         return re.sub(r'[^\d]', '', phone)
 
+
+class StreamCreateModelForm(ModelForm):
+    pass
