@@ -151,8 +151,14 @@ class OrderListView(ListView):
     template_name = 'apps/order/order-list.html'
     context_object_name = 'orders'
 
+    def get_queryset(self):
+        qs = super().get_queryset().filter(phone=self.request.user.phone)
+        return qs
+
     def get(self, request, *args, **kwargs):
-        return redirect('login_page')
+        if not request.user.is_authenticated:
+            return redirect('login_page')
+        return super().get(request, *args, **kwargs)
 
 
 class MarketListView(ProductListView):
@@ -177,6 +183,17 @@ class StreamProductDetailView(DetailView):
 
 
 class StreamCreateView(CreateView):
-    model = Stream
+    model = Product
     template_name = 'apps/stream/market.html'
+    context_object_name = 'products'
     form_class = StreamCreateModelForm
+    success_url = reverse_lazy('stream_list')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+
+

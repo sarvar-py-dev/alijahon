@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.forms import CharField, PasswordInput, ModelForm, Form, ModelChoiceField
 from django.utils.translation import gettext_lazy as _
 
-from apps.models import User, Order, Product
+from apps.models import User, Order, Product, Stream
 
 
 class CustomAuthenticationForm(Form):
@@ -109,4 +109,7 @@ class OrderCreateModelForm(ModelForm):
 
 
 class StreamCreateModelForm(ModelForm):
-    pass
+
+    class Meta:
+        model = Stream
+        fields = '__all__'

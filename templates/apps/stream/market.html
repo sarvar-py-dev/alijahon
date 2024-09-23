@@ -36,18 +36,17 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" class="form-class">
-                                <input type="hidden" name="csrfmiddlewaretoken"
-                                       value="z12Wz7LtihWsgNxEIvlbznU3Knln7kxUiNgYBWUpdJM6q33wUPdr0jhXLPXHaIBA">
-                                <input name="product_id" type="hidden" id="hidden_product" value="test">
+                            <form action="{% url 'create_stream' %}" method="POST" class="form-class">
+                                {% csrf_token %}
+                                <input name="product" type="hidden" id="hidden_product" value="{{ product.pk }}">
+                                <input name="owner" type="hidden" id="hidden_owner" value="{{ user.id }}">
 
-                                Oqim nomi <input type="text" name="title" class="form-control" placeholder
+                                Oqim nomi <input type="text" name="name" class="form-control" placeholder
                                                  mt-2="Oqim uchun nom kiriting" required id="id_title">
 
                                 Chegirma <input type="text" name="discount" class="form-control" placeholder
-                                                mt-2="Chegirma miqdori: {{ product.benefit }} so&#x27;mgacha"
+                                                mt-2="Chegirma miqdori: {{ product.payment_referral }} so&#x27;mgacha"
                                                 id="id_discount">
-
                                 <input type="submit" class="btn btn-primary mt-4" value="Oqim yaratish">
                             </form>
                         </div>
@@ -122,7 +121,7 @@
                                    class="btn bg-danger text-white mt-2">Reklama
                                     Posti</a>
                                 <button class="btn btn-primary btn_open_modal" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal" name="464">
+                                        data-bs-target="#exampleModal" name="{{ product.id }}">
                                     Oqim yaratish
                                 </button>
                                 <a href="{% url 'statistic_product' product.id %}"
@@ -139,4 +138,14 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block custom_js %}
+    <script>
+        $('.btn_open_modal').on('click', function () {
+            let product_id = $(this).attr('name');
+            console.log("Tugma bosildi, mahsulot ID:", product_id); 
+            $('#hidden_product').val(product_id);
+        });
+    </script>
 {% endblock %}

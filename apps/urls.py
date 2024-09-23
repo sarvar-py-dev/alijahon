@@ -3,7 +3,7 @@ from django.urls import path
 from apps.forms import ChangePasswordModelForm
 from apps.views import ProductDetailView, ProductListView, CustomLoginView, CategoryListView, CategoryObjectListView, \
     ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView, StreamListView, \
-    StreamProductDetailView, MarketListView, OrderListView, ProductStatisticDetailView
+    StreamProductDetailView, MarketListView, OrderListView, ProductStatisticDetailView, StreamCreateView
 
 urlpatterns = [
     # Products
@@ -33,10 +33,11 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout_page'),
 
     # Admin page
-    path('admin-page/urls/', StreamListView.as_view(), name='stream_list'),
     path('admin-page/market/', MarketListView.as_view(), name='market'),
     path('admin-page/product/<int:pk>/', ProductStatisticDetailView.as_view(), name='statistic_product'),
 
     # Stream
+    path('admin-page/urls/', StreamListView.as_view(), name='stream_list'),
     path('oqim/<int:pk>', StreamProductDetailView.as_view(), name='stream_product'),
+    path('oqim/create', StreamCreateView.as_view(), name='create_stream'),
 ]
