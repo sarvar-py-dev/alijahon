@@ -112,3 +112,11 @@ class StreamCreateModelForm(ModelForm):
     class Meta:
         model = Stream
         fields = '__all__'
+
+    def clean_discount(self):
+        discount = self.data.get('discount')
+        referral_pay = self.data['product'].payment_referral
+        if discount >= referral_pay:
+            raise ValidationError('chegirma miqdori ko`payib ketdi')
+
+        return discount

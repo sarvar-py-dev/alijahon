@@ -1,5 +1,5 @@
 from django.db.models import Model, ImageField, PositiveIntegerField, PositiveSmallIntegerField, CASCADE, \
-    ForeignKey, BooleanField, TextField, CharField, TextChoices, SET_NULL, FileField, IntegerField, URLField
+    ForeignKey, CharField, TextChoices, SET_NULL, IntegerField
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.models.base import SlugBaseModel, TimeBaseModel

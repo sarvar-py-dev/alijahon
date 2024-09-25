@@ -7,7 +7,7 @@
 
             <div class="container border-bottom-4">
                 <div class="content_name_block">
-                    <a href="/admin_page" class="content_name_block_back"><span
+                    <a href="{% url 'menu' %}" class="content_name_block_back"><span
                             class="fa fa-arrow-right"></span></a>
                     <div class="content_name_block_text">
                         <h1>Mahsulot statistikasi</h1>
@@ -34,8 +34,8 @@
                             </tr>
                             <tr>
                                 <td>Admin bonusi</td>
-                                <td>{{ product.payment_referral }}</td>
-                                <td>{{ product.payment_referral }}</td>
+                                <td>{{ product.payment_referral|default_if_none:0 }}</td>
+                                <td>{{ product.payment_referral|default_if_none:0 }}</td>
                             </tr>
                             <tr>
                                 <td>Mahsulot narxi</td>

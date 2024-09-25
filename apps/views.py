@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView
 
 from apps.forms import CustomAuthenticationForm, OrderCreateModelForm, StreamCreateModelForm
 from apps.models import Product, Category, User, Region, District, Order, Stream, SiteSettings
@@ -45,8 +45,9 @@ class ProductStatisticDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['all_stream_len'] = Stream.objects.count()
-        ctx['user_stream_len'] = Stream.objects.filter(owner=self.request.user).count()
+        streams = Stream.objects.filter(product=ctx['product'])
+        ctx['all_stream_len'] = streams.count()
+        ctx['user_stream_len'] = streams.filter(owner=self.request.user).count()
 
         return ctx
 
@@ -162,7 +163,7 @@ class OrderListView(ListView):
 
 
 class MarketListView(ProductListView):
-    template_name = 'apps/stream/market.html'
+    template_name = 'apps/admin-page/market.html'
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -173,8 +174,13 @@ class MarketListView(ProductListView):
 
 class StreamListView(ListView):
     model = Stream
-    template_name = 'apps/stream/stream.html'
+    template_name = 'apps/admin-page/stream.html'
     context_object_name = 'streams'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs.filter(owner=self.request.user)
+        return qs
 
 
 class StreamProductDetailView(DetailView, CreateView):
@@ -197,7 +203,7 @@ class StreamProductDetailView(DetailView, CreateView):
 
 class StreamCreateView(CreateView):
     model = Product
-    template_name = 'apps/stream/market.html'
+    template_name = 'apps/admin-page/market.html'
     context_object_name = 'products'
     form_class = StreamCreateModelForm
     success_url = reverse_lazy('stream_list')
@@ -211,11 +217,15 @@ class StreamCreateView(CreateView):
 
 class StreamStatusListView(ListView):
     model = Stream
-    template_name = 'apps/stream/stats.html'
+    template_name = 'apps/admin-page/stats.html'
     context_object_name = 'streams'
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs.filter()
+        qs.filter(owner=self.request.user)
 
         return qs
+
+
+class AdminPageTemplateView(LoginRequiredMixin, TemplateView):
+    template_name = 'apps/admin-page/menu.html'
