@@ -1,14 +1,15 @@
 from django.urls import path
 
 from apps.forms import ChangePasswordModelForm
-from apps.views import ProductDetailView, ProductListView, CustomLoginView, CategoryListView, CategoryObjectListView, \
+from apps.views import ProductDetailCreateView, ProductListView, CustomLoginView, CategoryListView, CategoryObjectListView, \
     ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView, StreamListView, \
-    StreamProductDetailView, MarketListView, OrderListView, ProductStatisticDetailView, StreamCreateView
+    StreamProductDetailView, MarketListView, OrderListView, ProductStatisticDetailView, StreamCreateView, \
+    StreamStatusListView
 
 urlpatterns = [
     # Products
     path('', ProductListView.as_view(), name='product_list'),
-    path('product/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),
+    path('product/<slug:slug>/', ProductDetailCreateView.as_view(), name='product_detail'),
 
     # Categories
     path('category/', CategoryListView.as_view(), name='category_list'),
@@ -38,6 +39,7 @@ urlpatterns = [
 
     # Stream
     path('admin-page/urls/', StreamListView.as_view(), name='stream_list'),
+    path('admin-page/stats/', StreamStatusListView.as_view(), name='stream_status'),
     path('oqim/<int:pk>', StreamProductDetailView.as_view(), name='stream_product'),
     path('oqim/create', StreamCreateView.as_view(), name='create_stream'),
 ]

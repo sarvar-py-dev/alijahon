@@ -11,6 +11,9 @@
                 <form method="post" action="{% url 'product_detail' product.slug %}">
                     {% csrf_token %}
                     <input type="text" hidden name="product" value="{{ product.pk }}">
+                    {% if 'oqim' in request.path %}
+                        <input type="text" hidden name="stream" value="{{ stream.pk }}">
+                    {% endif %}
                     <div class="mb-2">
                         <label class="form-label" for="formGroupNameInput">Ism:</label>
                         <input class="form-control" name="full_name" id="formGroupNameInput" type="text"/>

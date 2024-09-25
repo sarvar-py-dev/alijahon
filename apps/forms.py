@@ -109,7 +109,6 @@ class OrderCreateModelForm(ModelForm):
 
 
 class StreamCreateModelForm(ModelForm):
-
     class Meta:
         model = Stream
         fields = '__all__'

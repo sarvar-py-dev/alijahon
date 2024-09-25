@@ -25,7 +25,7 @@ class ProductListView(ListView):
         return ctx
 
 
-class ProductDetailView(DetailView, CreateView):
+class ProductDetailCreateView(DetailView, CreateView):
     model = Product
     template_name = 'apps/product/product-detail.html'
     form_class = OrderCreateModelForm
@@ -177,9 +177,22 @@ class StreamListView(ListView):
     context_object_name = 'streams'
 
 
-class StreamProductDetailView(DetailView):
+class StreamProductDetailView(DetailView, CreateView):
     model = Stream
     template_name = 'apps/product/product-detail.html'
+    form_class = OrderCreateModelForm
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['product'] = Product.objects.filter(pk=kwargs['object'].product.pk).first()
+
+        return ctx
+
+    def form_valid(self, form):
+        order = form.save()
+        if len(form.cleaned_data['phone']) != 12:
+            raise ValidationError('number must be 12 in length')
+        return redirect('success_product', pk=order.pk)
 
 
 class StreamCreateView(CreateView):
@@ -196,4 +209,13 @@ class StreamCreateView(CreateView):
         return super().form_invalid(form)
 
 
+class StreamStatusListView(ListView):
+    model = Stream
+    template_name = 'apps/stream/stats.html'
+    context_object_name = 'streams'
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs.filter()
+
+        return qs
