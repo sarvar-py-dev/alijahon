@@ -130,8 +130,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 class DistrictListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        region_id = request.GET.get('region_id')
-        if region_id:
+        if region_id := request.GET.get('region_id'):
             districts = District.objects.filter(region_id=region_id).values('id', 'name')
             return JsonResponse(list(districts), safe=False)
         return JsonResponse([], safe=False)
