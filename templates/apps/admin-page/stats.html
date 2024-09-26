@@ -8,11 +8,11 @@
                 <div class="container border-bottom-4">
                     <div class="header_tab_menu">
                         <div class="header_menu" style="overflow: auto">
-                            <a href="/admin_page/stats?period=today" class="btn btn-default">Bugun</a>
-                            <a href="/admin_page/stats?period=last_day" class="btn btn-default">Kechagi</a>
-                            <a href="/admin_page/stats?period=wekly" class="btn btn-default">Haftalik</a>
-                            <a href="/admin_page/stats?period=monthly" class="btn btn-default">Oylik</a>
-                            <a href="/admin_page/stats?period=all" class="btn btn-default">Hammasi</a>
+                            <a href="?period=today" class="btn btn-default">Bugun</a>
+                            <a href="?period=last_day" class="btn btn-default">Kechagi</a>
+                            <a href="?period=weekly" class="btn btn-default">Haftalik</a>
+                            <a href="?period=monthly" class="btn btn-default">Oylik</a>
+                            <a href="{% url 'stream_status' %}" class="btn btn-default">Hammasi</a>
                         </div>
                     </div>
                 </div>
@@ -35,14 +35,14 @@
                         <tr class="bg-info">
                             <td> JAMI</td>
                             <td></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 1</td>
+                            <td> {{ streams.aggregates.total_visit_count }}</td>
+                            <td> {{ streams.aggregates.total_new }}</td>
+                            <td> {{ streams.aggregates.total_ready }}</td>
+                            <td> {{ streams.aggregates.total_deliver }}</td>
+                            <td> {{ streams.aggregates.total_delivered }}</td>
+                            <td> {{ streams.aggregates.total_cant_phone }}</td>
+                            <td> {{ streams.aggregates.total_canceled }}</td>
+                            <td> {{ streams.aggregates.total_archived }}</td>
                         </tr>
                         </thead>
 
@@ -52,14 +52,14 @@
                             <tr>
                                 <th>{{ stream.name }}</th>
                                 <th>{{ stream.product.name }}</th>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
+                                <td>{{ stream.visit_count }}</td>
+                                <td>{{ stream.new }}</td>
+                                <td>{{ stream.ready }}</td>
+                                <td>{{ stream.deliver }}</td>
+                                <td>{{ stream.delivered }}</td>
+                                <td>{{ stream.cant_phone }}</td>
+                                <td>{{ stream.canceled }}</td>
+                                <td>{{ stream.archived }}</td>
                             </tr>
                         {% endfor %}
 
@@ -67,14 +67,14 @@
                         <tr class="bg-info">
                             <td> JAMI</td>
                             <td></td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 0</td>
-                            <td> 1</td>
+                            <td> {{ streams.aggregates.total_visit_count }}</td>
+                            <td> {{ streams.aggregates.total_new }}</td>
+                            <td> {{ streams.aggregates.total_ready }}</td>
+                            <td> {{ streams.aggregates.total_deliver }}</td>
+                            <td> {{ streams.aggregates.total_delivered }}</td>
+                            <td> {{ streams.aggregates.total_cant_phone }}</td>
+                            <td> {{ streams.aggregates.total_canceled }}</td>
+                            <td> {{ streams.aggregates.total_archived }}</td>
                         </tr>
                         </tbody>
                     </table>

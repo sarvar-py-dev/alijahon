@@ -17,7 +17,14 @@
                         <form action="{% url 'profile_settings' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="h-100 w-100 rounded-circle overflow-hidden position-relative"><img
-                                    src="{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
+                                    src="
+
+
+
+
+
+
+                                            {% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
                                     width="200" style="height: 162px" alt="" data-dz-thumbnail="data-dz-thumbnail">
 
                                 <input name="image" class="d-none" id="profile-image" type="file"/>
@@ -67,8 +74,8 @@
                                     onchange="getDistricts(this.value)">
                                 <option value="" selected disabled>Viloyatni tanlang</option>
                                 {% for region in regions %}
-                                    <option value="{{ region.id }}"
-                                            {% if user.region.id == region.id %}selected{% endif %}>{{ region.name }}</option>
+                                    <option value="{{ region.id }}"{% if user.district.region.id == region.id %}
+                                            selected{% endif %}>{{ region.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -87,7 +94,6 @@
                             Manzil
                             <input type="text" name="address" class="form-control" maxlength="200" id="id_location"
                                    value="{{ user.address|default_if_none:'' }}">
-
                         </div>
 
                         <div class="col-lg-6">

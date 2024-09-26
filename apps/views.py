@@ -1,11 +1,14 @@
+from datetime import timedelta
+
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
-from django.db.models import Q
+from django.db.models import Q, Count, F, Sum
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils.timezone import now
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView
 
@@ -23,6 +26,12 @@ class ProductListView(ListView):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
         ctx['categories'] = Category.objects.all()
         return ctx
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if search := self.request.GET.get('search'):
+            qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        return qs
 
 
 class ProductDetailCreateView(DetailView, CreateView):
@@ -137,7 +146,7 @@ class DistrictListView(LoginRequiredMixin, View):
 
 
 class OrderDetailView(DetailView):
-    model = Order
+    queryset = Order.objects.all()
     template_name = 'apps/order/success-product.html'
 
     def get_context_data(self, **kwargs):
@@ -178,7 +187,7 @@ class StreamListView(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs.filter(owner=self.request.user)
+        qs = qs.filter(owner=self.request.user)
         return qs
 
 
@@ -190,7 +199,8 @@ class StreamProductDetailView(DetailView, CreateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['product'] = Product.objects.filter(pk=kwargs['object'].product.pk).first()
-
+        ctx['stream'].visit_count += 1
+        ctx['stream'].save()
         return ctx
 
     def form_valid(self, form):
@@ -207,12 +217,6 @@ class StreamCreateView(CreateView):
     form_class = StreamCreateModelForm
     success_url = reverse_lazy('stream_list')
 
-    def form_valid(self, form):
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        return super().form_invalid(form)
-
 
 class StreamStatusListView(ListView):
     model = Stream
@@ -221,8 +225,38 @@ class StreamStatusListView(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs.filter(owner=self.request.user)
+        qs = qs.filter(owner=self.request.user)
 
+        if period := self.request.GET.get('period'):
+            if period == 'last_day':
+                qs = qs.filter(order__created_at__gte=now() - timedelta(1))
+            else:
+                time = {
+                    "today": 0,
+                    "weekly": 7,
+                    "monthly": 30
+                }
+                qs = qs.filter(order__created_at__gte=now() - timedelta(time[period]))
+
+        qs = qs.annotate(
+            new=Count('order', Q(order__status='new') & Q(order__stream_id=F('id'))),
+            ready=Count('order', Q(order__status='ready') & Q(order__stream_id=F('id'))),
+            deliver=Count('order', Q(order__status='deliver') & Q(order__stream_id=F('id'))),
+            delivered=Count('order', Q(order__status='delivered') & Q(order__stream_id=F('id'))),
+            cant_phone=Count('order', Q(order__status='cant_phone') & Q(order__stream_id=F('id'))),
+            canceled=Count('order', Q(order__status='canceled') & Q(order__stream_id=F('id'))),
+            archived=Count('order', Q(order__status='archived') & Q(order__stream_id=F('id'))),
+        )
+        qs.aggregates = qs.aggregate(
+            total_visit_count=Sum('visit_count'),
+            total_new=Sum('new'),
+            total_ready=Sum('ready'),
+            total_deliver=Sum('deliver'),
+            total_delivered=Sum('delivered'),
+            total_cant_phone=Sum('cant_phone'),
+            total_canceled=Sum('canceled'),
+            total_archived=Sum('archived')
+        )
         return qs
 
 

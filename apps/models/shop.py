@@ -40,11 +40,11 @@ class Order(TimeBaseModel):
     product = ForeignKey('apps.Product', CASCADE)
     phone = CharField(max_length=12)
     full_name = CharField(max_length=255)
-    owner = ForeignKey('apps.User', SET_NULL, related_name='orders', null=True, blank=True)
+    owner = ForeignKey('apps.User', SET_NULL, related_name='order', null=True, blank=True)
     status = CharField(max_length=255, choices=StatusType.choices, default=StatusType.NEW)
     region = ForeignKey('apps.Region', CASCADE, null=True, blank=True)
     district = ForeignKey('apps.District', CASCADE, null=True, blank=True)
-    stream = ForeignKey('apps.Stream', SET_NULL, null=True, blank=True)
+    stream = ForeignKey('apps.Stream', SET_NULL, null=True, blank=True, related_name='order')
 
     @property
     def price(self):
@@ -60,3 +60,4 @@ class Stream(TimeBaseModel):
     discount = IntegerField(db_default=0)
     owner = ForeignKey('apps.User', CASCADE)
     product = ForeignKey('apps.Product', CASCADE)
+    visit_count = PositiveIntegerField('Tashriflar Soni', default=0)
