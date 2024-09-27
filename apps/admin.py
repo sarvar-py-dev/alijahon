@@ -1,16 +1,22 @@
 from django.contrib.admin import ModelAdmin, register, site
 from django.contrib.auth.models import Group
-from django.utils.safestring import mark_safe
 
-from apps.models import Product, Category
+from apps.models import Category, ProductProxy, CategoryProxy
 
 site.unregister(Group)
 
 
-@register(Category)
-class CategoryModelAdmin(ModelAdmin):
-    pass
+@register(ProductProxy)
+class ProductProxyModelAdmin(ModelAdmin):
+    list_display = ("id", "name")
 
-@register(Product)
-class ProductModelAdmin(ModelAdmin):
-    pass
+
+@register(CategoryProxy)
+class CategoryModelAdmin(ModelAdmin):
+    list_display = ("id", "name")
+
+# def has_add_permission(self, request):
+#     return False
+#
+# def has_delete_permission(self, request, obj=None):
+#     return False

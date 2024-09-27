@@ -1,5 +1,7 @@
 {% extends 'apps/base.html' %}
 
+{% load favourite_tags %}
+
 {% block content %}
     <div class="card mt-2 mb-2">
         <div class="card-header bg-light">
@@ -79,6 +81,14 @@
                                         </svg>
                                     </a>
                                 </div>
+
+                                <a href="{% url 'favorite' product.pk %}" style="font-size: 25px; color: goldenrod" >
+                                    {% if user|is_liked:product %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -88,6 +98,6 @@
 
             </div>
         </div>
-    {% include 'apps/parts/_pagination.html' %}
+        {% include 'apps/parts/_pagination.html' %}
     </div>
 {% endblock %}

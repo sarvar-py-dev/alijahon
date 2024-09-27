@@ -24,8 +24,8 @@ class Product(SlugBaseModel, TimeBaseModel):
 
 
 class Favourite(Model):
-    user = ForeignKey('apps.User', CASCADE, verbose_name="Foydalanuvchi")
-    product = ForeignKey('apps.Product', CASCADE, verbose_name="Mahsulot")
+    user = ForeignKey('apps.User', CASCADE, verbose_name="Foydalanuvchi", related_name='favourites')
+    product = ForeignKey('apps.Product', CASCADE, verbose_name="Mahsulot", related_name='favourites')
 
 
 class Order(TimeBaseModel):
@@ -42,14 +42,14 @@ class Order(TimeBaseModel):
     product = ForeignKey('apps.Product', CASCADE, verbose_name="Buyurtmaga Tegishli Mahsulot")
     phone = CharField(verbose_name="Buyurtma Beruvchining Telefon Raqami", max_length=12)
     full_name = CharField(verbose_name="Buyurtma Qabul Qiluvchi", max_length=255)
-    owner = ForeignKey('apps.User', SET_NULL, verbose_name="Buyurtma Beruvchi", related_name='order', null=True,
+    owner = ForeignKey('apps.User', SET_NULL, verbose_name="Buyurtma Beruvchi", related_name='orders', null=True,
                        blank=True)
     status = CharField(verbose_name="Buyurtma Holati", max_length=255, choices=StatusType.choices,
                        default=StatusType.NEW)
     region = ForeignKey('apps.Region', CASCADE, verbose_name="Buyurtma Yetkaziladigan Viloyat", null=True, blank=True)
     district = ForeignKey('apps.District', CASCADE, verbose_name="Buyurtma Yetkaziladigan Tuman", null=True, blank=True)
     stream = ForeignKey('apps.Stream', SET_NULL, verbose_name="Buyurtma Oqimi", null=True, blank=True,
-                        related_name='order')
+                        related_name='orders')
 
     @property
     def price(self):

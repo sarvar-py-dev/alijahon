@@ -1,6 +1,7 @@
 {% extends  'apps/base.html' %}
 
 {% load category_tags %}
+{% load favourite_tags %}
 
 {% block content %}
 
@@ -51,7 +52,14 @@
                     {% endif %}
                     so'm
                 </span>
-
+                    <a href="{% url 'favorite' product.pk %}"
+                       style="font-size: 50px; color: goldenrod; margin-left: 20px">
+                        {% if user|is_liked:product %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    </a>
 
                 </h4>
             </div>

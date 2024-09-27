@@ -13,7 +13,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView
 
 from apps.forms import CustomAuthenticationForm, OrderCreateModelForm, StreamCreateModelForm
-from apps.models import Product, Category, User, Region, District, Order, Stream, SiteSettings
+from apps.models import Product, Category, User, Region, District, Order, Stream, SiteSettings, Favourite
 
 
 class ProductListView(ListView):
@@ -244,13 +244,13 @@ class StreamStatusListView(ListView):
                 qs = qs.filter(order__created_at__gte=now() - timedelta(time[period]))
 
         qs = qs.annotate(
-            new=Count('order', Q(order__status='new') & Q(order__stream_id=F('id'))),
-            ready=Count('order', Q(order__status='ready') & Q(order__stream_id=F('id'))),
-            deliver=Count('order', Q(order__status='deliver') & Q(order__stream_id=F('id'))),
-            delivered=Count('order', Q(order__status='delivered') & Q(order__stream_id=F('id'))),
-            cant_phone=Count('order', Q(order__status='cant_phone') & Q(order__stream_id=F('id'))),
-            canceled=Count('order', Q(order__status='canceled') & Q(order__stream_id=F('id'))),
-            archived=Count('order', Q(order__status='archived') & Q(order__stream_id=F('id'))),
+            new=Count('orders', Q(orders__status='new') & Q(orders__stream_id=F('id'))),
+            ready=Count('orders', Q(orders__status='ready') & Q(orders__stream_id=F('id'))),
+            deliver=Count('orders', Q(orders__status='deliver') & Q(orders__stream_id=F('id'))),
+            delivered=Count('orders', Q(orders__status='delivered') & Q(orders__stream_id=F('id'))),
+            cant_phone=Count('orders', Q(orders__status='cant_phone') & Q(orders__stream_id=F('id'))),
+            canceled=Count('orders', Q(orders__status='canceled') & Q(orders__stream_id=F('id'))),
+            archived=Count('orders', Q(orders__status='archived') & Q(orders__stream_id=F('id'))),
         )
         qs.aggregates = qs.aggregate(
             total_visit_count=Sum('visit_count'),
@@ -267,3 +267,23 @@ class StreamStatusListView(ListView):
 
 class AdminPageTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'apps/admin-page/menu.html'
+
+
+class FavouriteView(LoginRequiredMixin, View):
+
+    def get(self, request, pk, *args, **kwargs):
+        obj, created = Favourite.objects.get_or_create(user=request.user, product_id=pk)
+        if not created:
+            obj.delete()
+        referer = request.META.get('HTTP_REFERER')
+        if referer:
+            return redirect(referer)
+
+
+class FavouriteListView(LoginRequiredMixin, ListView):
+    model = Favourite
+    template_name = 'apps/admin-page/favourite.html'
+    context_object_name = 'favourites'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)

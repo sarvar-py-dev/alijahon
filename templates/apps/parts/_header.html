@@ -104,6 +104,7 @@
                                  
                                  
                                  
+
                                  {% if user.is_authenticated %}{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}{% else %}https://alijahon.uz/static/app/themes/stock/assets/img/nouser.png{% endif %}"
                          alt="card"/>
                 </div>
@@ -117,7 +118,7 @@
                             Profil
                         </a>
                         <a class="dropdown-item header_navbar_lang_menu_dropdown_item"
-                           href="/profile/liked-products">
+                           href="{% url 'favorite_list' %}">
                             Sevimlilar
                         </a>
                         <a class="dropdown-item header_navbar_lang_menu_dropdown_item"

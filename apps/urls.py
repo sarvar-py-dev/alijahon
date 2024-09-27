@@ -5,7 +5,7 @@ from apps.views import ProductDetailCreateView, ProductListView, CustomLoginView
     CategoryObjectListView, \
     ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView, StreamListView, \
     StreamProductDetailView, MarketListView, OrderListView, ProductStatisticDetailView, StreamCreateView, \
-    StreamStatusListView, AdminPageTemplateView
+    StreamStatusListView, AdminPageTemplateView, FavouriteView, FavouriteListView
 
 urlpatterns = [
     # Products
@@ -18,7 +18,7 @@ urlpatterns = [
 
     # Orders
     path('success-product/<int:pk>/', OrderDetailView.as_view(), name='success_product'),
-    path('profile/ordered-products', OrderListView.as_view(), name='order_list'),
+    path('profile/ordered-products/', OrderListView.as_view(), name='order_list'),
 
     # Profile
     path('profile/', ProfileDetailView.as_view(), name='profile'),
@@ -29,6 +29,9 @@ urlpatterns = [
         form_class=ChangePasswordModelForm
     ), name='update_password'),
     path('get-districts/', DistrictListView.as_view(), name='get_districts'),
+    # Favourite
+    path('favourite/<int:pk>/', FavouriteView.as_view(), name='favorite'),
+    path('profile/liked-products/', FavouriteListView.as_view(), name='favorite_list'),
 
     # Login, Logout
     path('login/', CustomLoginView.as_view(), name='login_page'),
@@ -42,6 +45,7 @@ urlpatterns = [
     # Stream
     path('admin-page/urls/', StreamListView.as_view(), name='stream_list'),
     path('admin-page/stats/', StreamStatusListView.as_view(), name='stream_status'),
-    path('oqim/<int:pk>', StreamProductDetailView.as_view(), name='stream_product'),
-    path('oqim/create', StreamCreateView.as_view(), name='create_stream'),
+    path('oqim/<int:pk>/', StreamProductDetailView.as_view(), name='stream_product'),
+    path('oqim/create/', StreamCreateView.as_view(), name='create_stream'),
+
 ]
