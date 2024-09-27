@@ -71,12 +71,9 @@
                             {% endfor %}
                         </div>
                         <div class="search-box" style="width: 100%;">
-                            <form action="/admin_page/market/" method="GET" class="position-relative"
-                                  style="width: 100%"
-                                  data-bs-display="static" autocomplete="off">
-                                <input type="hidden" name="csrfmiddlewaretoken"
-                                       value="z12Wz7LtihWsgNxEIvlbznU3Knln7kxUiNgYBWUpdJM6q33wUPdr0jhXLPXHaIBA">
-                                <input id="search-input" name="q" class="form-control search-input" type="search"
+                            <form class="position-relative" style="width: 100%" data-bs-display="static"
+                                  autocomplete="off">
+                                <input id="search-input" name="search" class="form-control search-input" type="search"
                                        placeholder="Qidiruv..." aria-label="Search"/>
                                 <span class="fas fa-search search-box-icon"></span>
                             </form>

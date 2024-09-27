@@ -178,6 +178,8 @@ class MarketListView(ProductListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        if search := self.request.GET.get('search'):
+            qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
         if category_slug := self.request.GET.get('category'):
             qs = qs.filter(category__slug=category_slug)
         return qs

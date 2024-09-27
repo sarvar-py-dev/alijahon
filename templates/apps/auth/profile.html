@@ -7,7 +7,10 @@
             <div class="col-12 col-md-12">
                 <div class="bg-white dark__bg-1100 p-3 h-100"><img
                         class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm"
-                        src="{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}" alt=""
+                        src="
+                                
+                                {% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
+                        alt=""
                         width="100">
                     <h6 class="mb-1">
                         998{{ user.phone }}
@@ -23,7 +26,7 @@
         <div class="card-body fs--1 p-0">
 
             <a class="border-bottom-0 notification rounded-0 border-x-0 border border-300"
-               href="#">
+               href="{% url 'favorite_list' %}">
                 <div class="notification-avatar">
                     <div class="avatar avatar-xl me-3">
                         <div class="avatar-emoji rounded-circle "><span role="img" aria-label="Emoji">📌</span></div>
