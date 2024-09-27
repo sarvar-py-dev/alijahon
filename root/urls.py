@@ -10,3 +10,6 @@ urlpatterns = [
                   path("ckeditor5/", include('django_ckeditor_5.urls')),
                   # path('accounts/', include('allauth.urls')),
               ] + static(MEDIA_URL, document_root=MEDIA_ROOT) + static(STATIC_URL, document_root=STATIC_ROOT)
+admin.site.site_header = "Alijahon Admin"
+admin.site.site_title = "Alijahon Admin Portal"
+admin.site.index_title = "Welcome to Alijahon Researcher Portal"

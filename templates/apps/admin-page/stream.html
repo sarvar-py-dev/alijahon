@@ -47,7 +47,7 @@
                             <div class="card">
                                 <div class="card-body" style="position: relative;">
                                     <div class="form-group">
-                                        <input type="text" value="{{ request.scheme }}://{{ request.headers.host }}{% url 'stream_product' stream.pk %}" readonly
+                                        <input type="text" id="copy_url" value="{{ request.scheme }}://{{ request.headers.host }}{% url 'stream_product' stream.pk %}" readonly
                                                class="ref_link form-control">
                                     </div>
                                     <button class="copy_ref_bn btn btn-primary"
@@ -78,5 +78,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.copy_ref_bn').forEach(button => {
+            button.addEventListener('click', function () {
+                let copyText = document.getElementById('copy_url').value
+                navigator.clipboard.writeText(copyText);
+                alert("Copied the text: " + copyText);
+            });
+        });
+    </script>
 
 {% endblock %}

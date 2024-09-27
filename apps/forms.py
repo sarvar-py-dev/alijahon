@@ -32,14 +32,14 @@ class CustomAuthenticationForm(Form):
 
     def clean_phone(self):
         phone = self.data.get('phone')
-        return re.sub(r'[^\d]', '', phone)
+        return re.sub(r'[^\d]', '', phone)[3:]
 
     def clean(self):
         phone = self.cleaned_data.get("phone")
         password = self.cleaned_data.get("password")
 
         if phone is not None and password:
-            if len(phone) != 12:
+            if len(phone) != 9:
                 raise ValidationError('number must be 12 in length')
             if not User.objects.filter(phone=phone).exists():
                 self.user_cache = User.objects.create_user(phone=phone, password=password)
@@ -105,18 +105,18 @@ class OrderCreateModelForm(ModelForm):
 
     def clean_phone(self):
         phone = self.data.get('phone')
-        return re.sub(r'[^\d]', '', phone)
+        return re.sub(r'[^\d]', '', phone)[3:]
 
 
 class StreamCreateModelForm(ModelForm):
     class Meta:
         model = Stream
-        fields = '__all__'
+        exclude = 'visit_count',
 
     def clean_discount(self):
-        discount = self.data.get('discount')
-        referral_pay = self.data['product'].payment_referral
-        if discount >= referral_pay:
+        discount = int(self.data.get('discount'))
+        referral_pay = Product.objects.get(id=self.data['product']).payment_referral
+        if discount > referral_pay:
             raise ValidationError('chegirma miqdori ko`payib ketdi')
 
         return discount

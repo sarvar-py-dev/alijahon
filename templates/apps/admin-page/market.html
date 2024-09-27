@@ -38,7 +38,7 @@
                         <div class="modal-body">
                             <form action="{% url 'create_stream' %}" method="POST" class="form-class">
                                 {% csrf_token %}
-                                <input name="product" type="hidden" id="hidden_product" value="{{ product.pk }}">
+                                <input name="product" type="hidden" id="hidden_product" value="{{ product.id }}">
                                 <input name="owner" type="hidden" id="hidden_owner" value="{{ user.id }}">
 
                                 Oqim nomi <input type="text" name="name" class="form-control" placeholder
@@ -138,14 +138,15 @@
         </div>
     </div>
 
-{% endblock %}
 
-{% block custom_js %}
+
     <script>
-        $('.btn_open_modal').on('click', function () {
-            let product_id = $(this).attr('name');
-            console.log("Tugma bosildi, mahsulot ID:", product_id); 
-            $('#hidden_product').val(product_id);
+        document.querySelectorAll('.btn_open_modal').forEach(button => {
+            button.addEventListener('click', function () {
+                let product_id = this.getAttribute('name');
+                console.log("Tugma bosildi, mahsulot ID:", product_id);
+                document.getElementById('hidden_product').value = product_id;
+            });
         });
     </script>
 {% endblock %}

@@ -10,20 +10,22 @@ class Category(SlugBaseModel):
 
 
 class Product(SlugBaseModel, TimeBaseModel):
-    description = CKEditor5Field()
-    image = ImageField(upload_to='products/%Y/%m/%d')
-    price = PositiveIntegerField()
-    quantity = PositiveSmallIntegerField()
-    category = ForeignKey('apps.Category', CASCADE, related_name='products')
-    payment_referral = PositiveIntegerField(help_text="so'mda", null=True, blank=True)
+    description = CKEditor5Field(verbose_name="Mahsulot Haqida")
+    image = ImageField(verbose_name="Mahsulot Rasmi", upload_to='products/%Y/%m/%d')
+    price = PositiveIntegerField(verbose_name="Mahsulot Narxi")
+    quantity = PositiveSmallIntegerField(verbose_name="Mahsulot Soni")
+    category = ForeignKey('apps.Category', CASCADE, verbose_name="Mahsulot Categoriasi", related_name='products')
+    payment_referral = PositiveIntegerField(verbose_name="Oqim Egasiga Beriladigan Pul", help_text="so'mda", default=0,
+                                            null=True,
+                                            blank=True)
 
     class Meta:
         ordering = '-created_at',
 
 
 class Favourite(Model):
-    user = ForeignKey('apps.User', CASCADE)
-    product = ForeignKey('apps.Product', CASCADE)
+    user = ForeignKey('apps.User', CASCADE, verbose_name="Foydalanuvchi")
+    product = ForeignKey('apps.Product', CASCADE, verbose_name="Mahsulot")
 
 
 class Order(TimeBaseModel):
@@ -36,15 +38,18 @@ class Order(TimeBaseModel):
         CANCELED = "canceled", 'Canceled'
         ARCHIVED = "archived", 'Archived'
 
-    quantity = PositiveSmallIntegerField(db_default=1)
-    product = ForeignKey('apps.Product', CASCADE)
-    phone = CharField(max_length=12)
-    full_name = CharField(max_length=255)
-    owner = ForeignKey('apps.User', SET_NULL, related_name='order', null=True, blank=True)
-    status = CharField(max_length=255, choices=StatusType.choices, default=StatusType.NEW)
-    region = ForeignKey('apps.Region', CASCADE, null=True, blank=True)
-    district = ForeignKey('apps.District', CASCADE, null=True, blank=True)
-    stream = ForeignKey('apps.Stream', SET_NULL, null=True, blank=True, related_name='order')
+    quantity = PositiveSmallIntegerField(verbose_name="Buyurtma Soni", db_default=1)
+    product = ForeignKey('apps.Product', CASCADE, verbose_name="Buyurtmaga Tegishli Mahsulot")
+    phone = CharField(verbose_name="Buyurtma Beruvchining Telefon Raqami", max_length=12)
+    full_name = CharField(verbose_name="Buyurtma Qabul Qiluvchi", max_length=255)
+    owner = ForeignKey('apps.User', SET_NULL, verbose_name="Buyurtma Beruvchi", related_name='order', null=True,
+                       blank=True)
+    status = CharField(verbose_name="Buyurtma Holati", max_length=255, choices=StatusType.choices,
+                       default=StatusType.NEW)
+    region = ForeignKey('apps.Region', CASCADE, verbose_name="Buyurtma Yetkaziladigan Viloyat", null=True, blank=True)
+    district = ForeignKey('apps.District', CASCADE, verbose_name="Buyurtma Yetkaziladigan Tuman", null=True, blank=True)
+    stream = ForeignKey('apps.Stream', SET_NULL, verbose_name="Buyurtma Oqimi", null=True, blank=True,
+                        related_name='order')
 
     @property
     def price(self):
@@ -56,8 +61,8 @@ class Order(TimeBaseModel):
 
 
 class Stream(TimeBaseModel):
-    name = CharField(max_length=255)
-    discount = IntegerField(db_default=0)
-    owner = ForeignKey('apps.User', CASCADE)
-    product = ForeignKey('apps.Product', CASCADE)
-    visit_count = PositiveIntegerField('Tashriflar Soni', default=0)
+    name = CharField(verbose_name="Oqim Nomi", max_length=255)
+    discount = IntegerField(verbose_name="Oqimning Chegirma Narhi", db_default=0)
+    owner = ForeignKey('apps.User', CASCADE, verbose_name="Oqim Egasi")
+    product = ForeignKey('apps.Product', CASCADE, verbose_name="Oqimning Mahsuloti")
+    visit_count = PositiveIntegerField(verbose_name='Tashriflar Soni', default=0)

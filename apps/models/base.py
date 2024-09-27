@@ -3,15 +3,15 @@ from django.utils.text import slugify
 
 
 class TimeBaseModel(Model):
-    updated_at = DateTimeField(auto_now=True)
-    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(verbose_name="Yaratilgan Vaqti", auto_now=True)
+    created_at = DateTimeField(verbose_name="Yangilangan Vaqti", auto_now_add=True)
 
     class Meta:
         abstract = True
 
 
 class SlugBaseModel(Model):
-    name = CharField(max_length=255)
+    name = CharField(verbose_name="Nomi", max_length=255)
     slug = SlugField(max_length=255, unique=True, editable=False)
 
     class Meta:

@@ -42,7 +42,7 @@ class ProductDetailCreateView(DetailView, CreateView):
 
     def form_valid(self, form):
         order = form.save()
-        if len(form.cleaned_data['phone']) != 12:
+        if len(form.cleaned_data['phone']) != 9:
             raise ValidationError('number must be 12 in length')
         return redirect('success_product', pk=order.pk)
 
@@ -106,6 +106,9 @@ class CustomLoginView(LoginView):
         user = form.get_user()
         login(self.request, user)
         return redirect('product_list')
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 class LogoutView(LoginRequiredMixin, View):
@@ -205,17 +208,19 @@ class StreamProductDetailView(DetailView, CreateView):
 
     def form_valid(self, form):
         order = form.save()
-        if len(form.cleaned_data['phone']) != 12:
+        if len(form.cleaned_data['phone']) != 9:
             raise ValidationError('number must be 12 in length')
         return redirect('success_product', pk=order.pk)
 
 
 class StreamCreateView(CreateView):
-    model = Product
+    model = Stream
     template_name = 'apps/admin-page/market.html'
-    context_object_name = 'products'
     form_class = StreamCreateModelForm
     success_url = reverse_lazy('stream_list')
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 class StreamStatusListView(ListView):
