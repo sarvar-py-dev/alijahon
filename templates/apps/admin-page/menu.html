@@ -102,11 +102,6 @@
                                         </svg>
                                         <!-- <span class="fas fa-video text-success"></span> Font Awesome fontawesome.com -->
                                     </div>
-                                    <div class="flex-1"><a class="stretched-link" href="/admin_page/diagrams">
-                                        <h5 class="text-800 mb-0">Diagrammalar</h5>
-                                    </a>
-                                        <p class="mb-0 fs--2 text-500">Sotilayotgan mahsulotlar statisikasi</p>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-5">
@@ -123,7 +118,8 @@
                                         </svg>
                                         <!-- <span class="fas fa-video text-success"></span> Font Awesome fontawesome.com -->
                                     </div>
-                                    <div class="flex-1"><a class="stretched-link" href="/{% url "order_stream_request_list" %}">
+                                    <div class="flex-1"><a class="stretched-link"
+                                                           href="/{% url "order_stream_request_list" %}">
                                         <h5 class="text-800 mb-0">So'rovlar</h5>
                                     </a>
                                         <p class="mb-0 fs--2 text-500">So'rovlar</p>
@@ -144,7 +140,7 @@
                                         </svg>
                                         <!-- <span class="fas fa-user text-info"></span> Font Awesome fontawesome.com -->
                                     </div>
-                                    <div class="flex-1"><a class="stretched-link" href="/admin_page/withdraw">
+                                    <div class="flex-1"><a class="stretched-link" href="{% url 'payment' %}">
                                         <h5 class="text-800 mb-0">To'lovlar</h5>
                                     </a>
                                         <p class="mb-0 fs--2 text-500">Mening hisobim & To'lovga sorov berish</p>
@@ -165,7 +161,7 @@
                                         </svg>
                                         <!-- <span class="fas fa-user text-info"></span> Font Awesome fontawesome.com -->
                                     </div>
-                                    <div class="flex-1"><a class="stretched-link" href="/admin_page/competition">
+                                    <div class="flex-1"><a class="stretched-link" href="{% url 'competition' %}">
                                         <h5 class="text-800 mb-0">Konkurs</h5>
                                     </a>
                                         <p class="mb-0 fs--2 text-500">Konkurs sahifasi</p>

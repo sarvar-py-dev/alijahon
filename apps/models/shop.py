@@ -1,5 +1,7 @@
+from gettext import textdomain
+
 from django.db.models import Model, ImageField, PositiveIntegerField, PositiveSmallIntegerField, CASCADE, \
-    ForeignKey, CharField, TextChoices, SET_NULL, IntegerField
+    ForeignKey, CharField, TextChoices, SET_NULL, IntegerField, TextField, DateTimeField
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.models.base import SlugBaseModel, TimeBaseModel
@@ -36,7 +38,9 @@ class Order(TimeBaseModel):
         DELIVERED = "delivered", 'Delivered'
         CANT_PHONE = "cant_phone", 'Cant_phone'
         CANCELED = "canceled", 'Canceled'
+        RETURNED = "returned", 'Returned'
         ARCHIVED = "archived", 'Archived'
+        HOLD = "hold", 'Hold'
 
     quantity = PositiveSmallIntegerField(verbose_name="Buyurtma Soni", db_default=1)
     product = ForeignKey('apps.Product', CASCADE, verbose_name="Buyurtmaga Tegishli Mahsulot")
@@ -66,3 +70,11 @@ class Stream(TimeBaseModel):
     owner = ForeignKey('apps.User', CASCADE, verbose_name="Oqim Egasi")
     product = ForeignKey('apps.Product', CASCADE, verbose_name="Oqimning Mahsuloti")
     visit_count = PositiveIntegerField(verbose_name='Tashriflar Soni', default=0)
+
+
+class Competition(Model):
+    started_at = DateTimeField(verbose_name='Konkurs Boshlanish Vaqti')
+    ended_at = DateTimeField(verbose_name='Konkurs Yakunlanish Vaqti')
+    image = ImageField(verbose_name='Konkurs Uchun Rasm', upload_to='competition/')
+    description = TextField(verbose_name='Konkurs Uchun Tavsif')
+

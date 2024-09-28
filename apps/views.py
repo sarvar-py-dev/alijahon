@@ -13,7 +13,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView
 
 from apps.forms import CustomAuthenticationForm, OrderCreateModelForm, StreamCreateModelForm
-from apps.models import Product, Category, User, Region, District, Order, Stream, SiteSettings, Favourite
+from apps.models import Product, Category, User, Region, District, Order, Stream, SiteSettings, Favourite, Competition
 
 
 class ProductListView(ListView):
@@ -301,3 +301,12 @@ class OrderStreamRequestListView(LoginRequiredMixin, ListView):
         qs = qs.filter(stream__owner=self.request.user)
 
         return qs
+
+
+class PaymentTemplateView(TemplateView):
+    template_name = 'apps/admin-page/payment.html'
+
+
+class CompetitionListView(ListView):
+    model = Competition
+    template_name = 'apps/admin-page/competition.html'
