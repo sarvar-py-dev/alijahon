@@ -236,14 +236,14 @@ class StreamStatusListView(ListView):
 
         if period := self.request.GET.get('period'):
             if period == 'last_day':
-                qs = qs.filter(order__created_at__gte=now() - timedelta(1))
+                qs = qs.filter(orders__created_at__gte=now() - timedelta(1))
             else:
                 time = {
                     "today": 0,
                     "weekly": 7,
                     "monthly": 30
                 }
-                qs = qs.filter(order__created_at__gte=now() - timedelta(time[period]))
+                qs = qs.filter(orders__created_at__gte=now() - timedelta(time[period]))
 
         qs = qs.annotate(
             new=Count('orders', Q(orders__status='new') & Q(orders__stream_id=F('id'))),
