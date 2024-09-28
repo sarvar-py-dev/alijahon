@@ -5,7 +5,7 @@ from apps.views import ProductDetailCreateView, ProductListView, CustomLoginView
     CategoryObjectListView, \
     ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView, StreamListView, \
     StreamProductDetailView, MarketListView, OrderListView, ProductStatisticDetailView, StreamCreateView, \
-    StreamStatusListView, AdminPageTemplateView, FavouriteView, FavouriteListView
+    StreamStatusListView, AdminPageTemplateView, FavouriteView, FavouriteListView, OrderStreamRequestListView
 
 urlpatterns = [
     # Products
@@ -41,6 +41,7 @@ urlpatterns = [
     path('admin-page/', AdminPageTemplateView.as_view(), name='menu'),
     path('admin-page/market/', MarketListView.as_view(), name='market'),
     path('admin-page/product/<int:pk>/', ProductStatisticDetailView.as_view(), name='statistic_product'),
+    path('admin-page/requests/', OrderStreamRequestListView.as_view(), name='order_stream_request_list'),
 
     # Stream
     path('admin-page/urls/', StreamListView.as_view(), name='stream_list'),

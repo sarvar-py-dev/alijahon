@@ -289,3 +289,15 @@ class FavouriteListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
+
+
+class OrderStreamRequestListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'apps/admin-page/request.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(stream__owner=self.request.user)
+
+        return qs
