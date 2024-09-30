@@ -111,7 +111,7 @@ class OrderCreateModelForm(ModelForm):
 class StreamCreateModelForm(ModelForm):
     class Meta:
         model = Stream
-        exclude = 'visit_count',
+        exclude = 'visit_count', 'owner'
 
     def clean_discount(self):
         discount = int(self.data.get('discount'))

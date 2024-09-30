@@ -1,7 +1,5 @@
-from gettext import textdomain
-
 from django.db.models import Model, ImageField, PositiveIntegerField, PositiveSmallIntegerField, CASCADE, \
-    ForeignKey, CharField, TextChoices, SET_NULL, IntegerField, TextField, DateTimeField
+    ForeignKey, CharField, TextChoices, SET_NULL, IntegerField, DateField
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.models.base import SlugBaseModel, TimeBaseModel
@@ -72,9 +70,8 @@ class Stream(TimeBaseModel):
     visit_count = PositiveIntegerField(verbose_name='Tashriflar Soni', default=0)
 
 
-class Competition(Model):
-    started_at = DateTimeField(verbose_name='Konkurs Boshlanish Vaqti')
-    ended_at = DateTimeField(verbose_name='Konkurs Yakunlanish Vaqti')
+class Competition(TimeBaseModel):
+    started_at = DateField(verbose_name='Konkurs Boshlanish Vaqti')
+    ended_at = DateField(verbose_name='Konkurs Yakunlanish Vaqti')
     image = ImageField(verbose_name='Konkurs Uchun Rasm', upload_to='competition/')
-    description = TextField(verbose_name='Konkurs Uchun Tavsif')
-
+    description = CKEditor5Field(verbose_name='Konkurs Uchun Tavsif')

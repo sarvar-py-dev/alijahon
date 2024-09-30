@@ -181,7 +181,11 @@ class MarketListView(ProductListView):
         if search := self.request.GET.get('search'):
             qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
         if category_slug := self.request.GET.get('category'):
-            qs = qs.filter(category__slug=category_slug)
+            if category_slug == 'top':
+                qs = qs.annotate(order_count=Count('order')).filter(
+                    order__status=Order.StatusType.DELIVERED).order_by('-order_count', '-order__quantity')
+            else:
+                qs = qs.filter(category__slug=category_slug)
         return qs
 
 
@@ -221,6 +225,12 @@ class StreamCreateView(CreateView):
     form_class = StreamCreateModelForm
     success_url = reverse_lazy('stream_list')
 
+    def form_valid(self, form):
+        stream = form.save(False)
+        stream.owner = self.request.user
+        stream.save()
+        return super().form_valid(form)
+
     def form_invalid(self, form):
         return super().form_invalid(form)
 
@@ -235,15 +245,14 @@ class StreamStatusListView(ListView):
         qs = qs.filter(owner=self.request.user)
 
         if period := self.request.GET.get('period'):
-            if period == 'last_day':
-                qs = qs.filter(orders__created_at__gte=now() - timedelta(1))
-            else:
-                time = {
-                    "today": 0,
-                    "weekly": 7,
-                    "monthly": 30
-                }
-                qs = qs.filter(orders__created_at__gte=now() - timedelta(time[period]))
+            if period == 'today':
+                qs = qs.filter(orders__created_at__exact=now().date())
+            elif period == 'last_day':
+                qs = qs.filter(orders__created_at__exact=now().date() - timedelta(1))
+            elif period == 'weekly':
+                qs = qs.filter(orders__created_at__gte=now() - timedelta(now().weekday()))
+            elif period == 'monthly':
+                qs = qs.filter(orders__created_at__year=now().year, orders__created_at__month=now().month)
 
         qs = qs.annotate(
             new=Count('orders', Q(orders__status='new') & Q(orders__stream_id=F('id'))),
@@ -307,6 +316,9 @@ class PaymentTemplateView(TemplateView):
     template_name = 'apps/admin-page/payment.html'
 
 
-class CompetitionListView(ListView):
+class CompetitionListView(DetailView):
     model = Competition
     template_name = 'apps/admin-page/competition.html'
+
+    def get_object(self, queryset=None):
+        return '1'

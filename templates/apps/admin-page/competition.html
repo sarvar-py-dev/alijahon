@@ -4,18 +4,16 @@
 {% block content %}
     <div class="card-group mt-2">
         <div class="card overflow-hidden">
-            <div class="card-img-top"><img class="img-fluid" src="/media/competition/IMG_5345.jpeg" alt="Konkurs"></div>
+            <div class="card-img-top"><img class="img-fluid" src="{{ competition.image }}" alt="Konkurs"></div>
             <div class="card-body">
                 <h3 class="card-title">Alijahon.uz</h3>
-                <p class="card-text">
-                <p>Alijahon.uz sayti navbatdagi konkursiga<br/>
-                    Start berad hammaga omad !!</p></p>
+                <p class="card-text">{{ competition.description }}</p>
                 <div class="row light">
                     <div class="col-6 col-sm-6 col-lg-4 mb-4">
                         <div class="card text-white bg-info">
                             <div class="card-body">
                                 <div class="card-title">Boshlash</div>
-                                <p class="card-text">20-Sentabr, 2024-yil</p>
+                                <p class="card-text">{{ competition.started_at }}</p>
                             </div>
                         </div>
                     </div>
@@ -23,7 +21,7 @@
                         <div class="card text-white bg-danger">
                             <div class="card-body">
                                 <div class="card-title">Yakunlash</div>
-                                <p class="card-text">20-Mart, 2025-yil</p>
+                                <p class="card-text">{{ competition.ended_at }}</p>
                             </div>
                         </div>
                     </div>
