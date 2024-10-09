@@ -34,11 +34,19 @@ class ProductListView(ListView):
         return qs
 
 
-class ProductDetailCreateView(DetailView, CreateView):
+class StreamProductDetailCreateView(DetailView, CreateView):
     model = Product
     template_name = 'apps/product/product-detail.html'
     form_class = OrderCreateModelForm
-    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if stream_pk := self.kwargs.get('pk'):
+            ctx['stream'] = Stream.objects.filter(pk=stream_pk).first()
+            ctx['product'] = ctx['stream'].product
+            ctx['stream'].visit_count += 1
+            ctx['stream'].save()
+        return ctx
 
     def form_valid(self, form):
         order = form.save()
@@ -200,25 +208,6 @@ class StreamListView(ListView):
         return qs
 
 
-class StreamProductDetailView(DetailView, CreateView):
-    model = Stream
-    template_name = 'apps/product/product-detail.html'
-    form_class = OrderCreateModelForm
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['product'] = Product.objects.filter(pk=kwargs['object'].product.pk).first()
-        ctx['stream'].visit_count += 1
-        ctx['stream'].save()
-        return ctx
-
-    def form_valid(self, form):
-        order = form.save()
-        if len(form.cleaned_data['phone']) != 9:
-            raise ValidationError('number must be 12 in length')
-        return redirect('success_product', pk=order.pk)
-
-
 class StreamCreateView(CreateView):
     model = Stream
     template_name = 'apps/admin-page/market.html'
@@ -322,3 +311,35 @@ class CompetitionListView(DetailView):
 
     def get_object(self, queryset=None):
         return '1'
+
+
+class BrokenOrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-broken.html'
+
+
+class DeliveringOrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-delivering.html'
+
+
+class HoldOrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-hold.html'
+
+
+class NewOrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-new.html'
+
+
+class OrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-order-detail.html'
+
+
+class AddOrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-product-add.html'
+
+
+class ReadyOrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-ready.html'
+
+
+class WaitingOrderOperatorTemplateView(TemplateView):
+    template_name = 'apps/operator/operator-waiting.html'

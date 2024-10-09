@@ -20,6 +20,11 @@
             background-color: #5e6e82;
             color: white;
         }
+
+        .disabletBtn {
+            background-color: gray;
+            color: red;
+        }
     </style>
 
     <div class="card mb-3">
@@ -38,15 +43,16 @@
                         <div class="modal-body">
                             <form action="{% url 'create_stream' %}" method="POST" class="form-class">
                                 {% csrf_token %}
-                                <input name="product" type="hidden" id="hidden_product" value="{{ product.id }}">
+                                <input name="product" type="hidden" id="hidden_product" value="{{ id }}">
 
                                 Oqim nomi <input type="text" name="name" class="form-control" placeholder
                                                  mt-2="Oqim uchun nom kiriting" required id="id_title">
 
-                                Chegirma <input type="text" name="discount" class="form-control" placeholder
-                                                mt-2="Chegirma miqdori: {{ product.payment_referral }} so&#x27;mgacha"
+                                Chegirma <input type="text" oninput="checkDiscountPrice(this)" name="discount"
+                                                class="form-control"
+                                                placeholder="Chegirma miqdori: {{ payment_referral }} so'mgacha"
                                                 id="id_discount">
-                                <input type="submit" class="btn btn-primary mt-4" value="Oqim yaratish">
+                                <input type="submit" class="btn btn-primary mt-4 btn-click" value="Oqim yaratish">
                             </form>
                         </div>
                     </div>
@@ -79,6 +85,16 @@
                         </div>
                     </div>
                 </div>
+
+                {#            <div class="card" bis_skin_checked="1">#}
+                {#                <div class="card-body" bis_skin_checked="1">#}
+                {##}
+                {#                    <div class="alert alert-warning d-block" role="alert" bis_skin_checked="1">Oqim noto'g'ri#}
+                {#                        yaratildi iltimos tekshirib qayta urinib ko'ring#}
+                {#                    </div>#}
+                {##}
+                {#                </div>#}
+                {#            </div>#}
 
                 <div class="row">
 
@@ -117,7 +133,8 @@
                                    class="btn bg-danger text-white mt-2">Reklama
                                     Posti</a>
                                 <button class="btn btn-primary btn_open_modal" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal" name="{{ product.id }}">
+                                        data-bs-target="#exampleModal"
+                                        name="{{ product.id }},{{ product.payment_referral }}">
                                     Oqim yaratish
                                 </button>
                                 <a href="{% url 'statistic_product' product.id %}"
@@ -135,14 +152,82 @@
     </div>
 
 
-
     <script>
+        let priceDiscount11 = 0;
+
         document.querySelectorAll('.btn_open_modal').forEach(button => {
             button.addEventListener('click', function () {
                 let product_id = this.getAttribute('name');
-                console.log("Tugma bosildi, mahsulot ID:", product_id);
-                document.getElementById('hidden_product').value = product_id;
+                let valuesArray = product_id.split(','); // Vergul orqali ajratish
+                let id = valuesArray[0];  // Birinchi qiymat
+                let payment_referral = valuesArray[1];            // Ikkinchi qiymat
+
+
+                priceDiscount11 = payment_referral;
+                console.log("priceDiscount11", priceDiscount11)
+                console.log("Tugma bosildi, mahsulot ID:", id);
+                console.log(product_id)
+                document.getElementById('hidden_product').value = id;
             });
         });
+
+        function checkDiscountPrice(element) {
+            let value = element.value;
+            let btnClick = document.getElementsByClassName("btn-click")[0]; // Birinchi tugmani olish
+
+            console.log("Chegirma miqdori:", value);
+
+            if (value > priceDiscount11) {
+                console.log("if");
+                btnClick.classList.add("disabletBtn");
+                btnClick.classList.remove("btn");
+                btnClick.classList.remove("btn-primary");
+                btnClick.disabled = true; // Tugmani o'chirish
+            } else {
+                console.log("else");
+                btnClick.classList.remove("disabletBtn"); // O'zgartirilishi kerak
+                btnClick.classList.add("btn"); // Tugmani asl holatiga qaytarish
+                btnClick.classList.add("btn-primary"); // Tugmani asl holatiga qaytarish
+                btnClick.disabled = false; // Tugmani yoqish
+            }
+        }
+
+
+        {#function checkDiscountPrice(element) {#}
+        {##}
+        {#console.log("Tugma bosildi, mahsulot ID:", product_id);#}
+        {#    console.log(element)#}
+        {##}
+        {#    let value = element.value;#}
+        {#    let btnClick = document.getElementsByClassName("btn-click")[0]#}
+        {##}
+        {#    console.log(btnClick)#}
+        {##}
+        {##}
+        {#    console.log("Chegirma miqdori:", value);#}
+        {##}
+        {#    // Agar chegirma qiymati bo'lsa, tugmani yoqing#}
+        {#    if (value > priceDiscount11) {#}
+        {#        console.log("if")#}
+        {#        console.log(btnClick)#}
+        {#        btnClick.classList.add("disabletBtn")#}
+        {#        btnClick.classList.remove("btn")#}
+        {#        btnClick.classList.remove("btn-primary")#}
+        {#        btnClick.disabled = true; // Tugmani yoqish#}
+        {#    } else {#}
+        {#        console.log("else")#}
+        {#        btnClick.classList.add("disabletBtn")#}
+        {#        btnClick.classList.remove("btn")#}
+        {#        btnClick.classList.remove("btn-primary")#}
+        {#        btnClick.disabled = false; // Tugmani o'chirish#}
+        {#    }#}
+        {##}
+        {##}
+        {#console.log("Chegirma miqdori:", value);#}
+        {#}#}
+
+            {#console.log({{ form.errors }})#}
+            console.log(product_id)
+
     </script>
 {% endblock %}

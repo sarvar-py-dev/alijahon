@@ -1,17 +1,26 @@
 from django.urls import path
 
 from apps.forms import ChangePasswordModelForm
-from apps.views import ProductDetailCreateView, ProductListView, CustomLoginView, CategoryListView, \
-    CategoryObjectListView, \
-    ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView, StreamListView, \
-    StreamProductDetailView, MarketListView, OrderListView, ProductStatisticDetailView, StreamCreateView, \
-    StreamStatusListView, AdminPageTemplateView, FavouriteView, FavouriteListView, OrderStreamRequestListView, \
-    PaymentTemplateView, CompetitionListView
+from apps.views import (StreamProductDetailCreateView, ProductListView, CustomLoginView, CategoryListView,
+                        CategoryObjectListView,
+                        ProfileDetailView, ProfileUpdateView, LogoutView, DistrictListView, OrderDetailView,
+                        StreamListView,
+                        MarketListView, OrderListView, ProductStatisticDetailView, StreamCreateView,
+                        StreamStatusListView, AdminPageTemplateView, FavouriteView, FavouriteListView,
+                        OrderStreamRequestListView,
+                        PaymentTemplateView, CompetitionListView, BrokenOrderOperatorTemplateView,
+                        DeliveringOrderOperatorTemplateView,
+                        HoldOrderOperatorTemplateView,
+                        NewOrderOperatorTemplateView,
+                        OrderOperatorTemplateView,
+                        AddOrderOperatorTemplateView,
+                        ReadyOrderOperatorTemplateView,
+                        WaitingOrderOperatorTemplateView)
 
 urlpatterns = [
     # Products
     path('', ProductListView.as_view(), name='product_list'),
-    path('product/<slug:slug>/', ProductDetailCreateView.as_view(), name='product_detail'),
+    path('product/<slug:slug>/', StreamProductDetailCreateView.as_view(), name='product_detail'),
 
     # Categories
     path('category/', CategoryListView.as_view(), name='category_list'),
@@ -50,7 +59,24 @@ urlpatterns = [
     # Stream
     path('admin-page/urls/', StreamListView.as_view(), name='stream_list'),
     path('admin-page/stats/', StreamStatusListView.as_view(), name='stream_status'),
-    path('oqim/<int:pk>/', StreamProductDetailView.as_view(), name='stream_product'),
+    path('oqim/<int:pk>/', StreamProductDetailCreateView.as_view(), name='stream_product'),
     path('oqim/create/', StreamCreateView.as_view(), name='create_stream'),
+
+    # Operator
+    path('operator/BrokenOrderOperatorTemplateView/', BrokenOrderOperatorTemplateView.as_view(),
+         name='BrokenOrderOperatorTemplateView'),
+    path('operator/DeliveringOrderOperatorTemplateView/', DeliveringOrderOperatorTemplateView.as_view(),
+         name='DeliveringOrderOperatorTemplateView'),
+    path('operator/HoldOrderOperatorTemplateView/', HoldOrderOperatorTemplateView.as_view(),
+         name='HoldOrderOperatorTemplateView'),
+    path('operator/NewOrderOperatorTemplateView/', NewOrderOperatorTemplateView.as_view(),
+         name='NewOrderOperatorTemplateView'),
+    path('operator/OrderOperatorTemplateView/', OrderOperatorTemplateView.as_view(), name='OrderOperatorTemplateView'),
+    path('operator/AddOrderOperatorTemplateView/', AddOrderOperatorTemplateView.as_view(),
+         name='AddOrderOperatorTemplateView'),
+    path('operator/ReadyOrderOperatorTemplateView/', ReadyOrderOperatorTemplateView.as_view(),
+         name='ReadyOrderOperatorTemplateView'),
+    path('operator/WaitingOrderOperatorTemplateView/', WaitingOrderOperatorTemplateView.as_view(),
+         name='WaitingOrderOperatorTemplateView'),
 
 ]

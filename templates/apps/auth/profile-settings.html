@@ -17,15 +17,8 @@
                         <form action="{% url 'profile_settings' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="h-100 w-100 rounded-circle overflow-hidden position-relative"><img
-                                    src="
-
-
-
-
-
-
-                                            {% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
-                                    width="200" style="height: 162px" alt="" data-dz-thumbnail="data-dz-thumbnail">
+                                    src="{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
+                                    width="200" style="height: 162px; object-fit: contain;" alt="" data-dz-thumbnail="data-dz-thumbnail">
 
                                 <input name="image" class="d-none" id="profile-image" type="file"/>
                                 <label class="mb-0 overlay-icon d-flex flex-center" for="profile-image"><span

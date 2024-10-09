@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager
 
@@ -7,7 +9,7 @@ class CustomUserManager(UserManager):
     def _create_user(self, phone, password, **extra_fields):
         if not phone:
             raise ValueError("The given phone must be set")
-        user = self.model(phone=phone, **extra_fields)
+        user = self.model(phone=re.sub(r'[^\d]', '', phone)[3:], **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
         return user

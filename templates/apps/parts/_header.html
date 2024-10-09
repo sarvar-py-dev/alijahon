@@ -89,23 +89,8 @@
                data-bs-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
                 <div class="avatar avatar-xl">
-                    <img class="rounded-circle"
-                         src="
-
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-
-                                 {% if user.is_authenticated %}{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}{% else %}https://alijahon.uz/static/app/themes/stock/assets/img/nouser.png{% endif %}"
+                    <img style="object-fit: contain;" class="rounded-circle"
+                         src="{% if user.is_authenticated %}{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}{% else %}https://alijahon.uz/static/app/themes/stock/assets/img/nouser.png{% endif %}"
                          alt="card"/>
                 </div>
             </a>

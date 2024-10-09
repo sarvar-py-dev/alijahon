@@ -7,9 +7,7 @@
             <div class="col-12 col-md-12">
                 <div class="bg-white dark__bg-1100 p-3 h-100"><img
                         class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm"
-                        src="
-                                
-                                {% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
+                        src="{% if user.image %}{{ user.image.url }}{% else %}https://alijahon.uz/media/img/nouser.png{% endif %}"
                         alt=""
                         width="100">
                     <h6 class="mb-1">
